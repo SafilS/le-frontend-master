@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.text-border-red {
+  color: white;
+  -webkit-text-stroke: 0.1vw #dc2626; /* Tailwind red-600 */
+  text-stroke: 0.1vw #dc2626; /* For broader browser support */
+}
