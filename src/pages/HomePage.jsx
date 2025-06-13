@@ -12,7 +12,9 @@ import ServiceShowcase from '../components/home/ServiceShowcase';
 import ProcessExplainer from '../components/home/ProcessExplainer';
 import TestimonialCarousel from '../components/home/TestimonialCarousel';
 import PortfolioGrid from '../components/home/OurProjects';
+import GetFreeEstimate from '../components/home/GetFreeEstimate';
 import Contact from '../components/home/Contact';
+import DesignToolIntro from '../components/home/DesignToolIntro';
 
 const HomePage = () => {
   // Fade-in animation for sections
@@ -217,6 +219,29 @@ const HomePage = () => {
       >
         <PortfolioGrid />
       </motion.section>
+
+      {/* Get Free Estimate Section */}
+      <motion.section 
+        className="estimate-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeInVariants}
+      >
+        <GetFreeEstimate />
+      </motion.section>
+
+      {/* Design Tool Introduction Section */}
+      <motion.section 
+        className="design-tool-intro-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeInVariants}
+      >
+        <DesignToolIntro />
+      </motion.section>
+
       {/* Services Showcase Section */}
       <motion.section 
         className="services-section"

@@ -38,7 +38,6 @@ const Header = () => {
 
   const navLinks = [
     { name: 'Crown Luxe', path: '/luxe' },
-    { name: 'Crown Deco', path: '/deco' },
     { name: 'Design Gallery', path: '/gallery' },
     { name: 'Modular Kitchen', path: '/kitchen' },
     { name: 'Wardrobe', path: '/wardrobe' },
@@ -146,7 +145,7 @@ const Header = () => {
             {showDesktopNav && (
               <div className="flex items-center flex-shrink-0 ml-2">
                 <a 
-                  href="/get-estimate" 
+                  href="/estimate/entire-home" 
                   className="bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-white py-2 px-2 lg:px-3 xl:px-4 rounded-lg transition-all duration-300 text-xs font-bold flex items-center shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap"
                 >
                   <Phone size={12} className="lg:mr-1" />
