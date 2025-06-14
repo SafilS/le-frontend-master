@@ -4,7 +4,7 @@ import { Menu, X, Phone } from 'lucide-react';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showDesktopNav, setShowDesktopNav] = useState(true);
+  const [showDesktopNav, setShowDesktopNav] = useState(false);
 
   // Handle scroll effect for header
   useEffect(() => {
@@ -26,8 +26,8 @@ const Header = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      // Simplified breakpoint for better responsiveness
-      const shouldShow = window.innerWidth >= 1024;
+      // Breakpoint at exactly 1540px for desktop/mobile view
+      const shouldShow = window.innerWidth >= 1540;
       setShowDesktopNav(shouldShow);
     };
 
@@ -56,8 +56,8 @@ const Header = () => {
             <div className="flex-shrink-0 max-w-[65%] lg:max-w-none">
               <a href="/" className="flex items-center group">
                 <img 
-                  src="/public/assets/icons/logo.png" 
-                  alt="Crown Interiors" 
+                  src="/assets/icons/logo.png" 
+                  alt="LE-Crown Interiors" 
                   className="h-10 md:h-8 lg:h-10 md:mr-1 transition-transform duration-300 group-hover:scale-110"
                 />
                 <div className="relative">
@@ -114,7 +114,7 @@ const Header = () => {
 
             {/* Desktop Navigation */}
             {showDesktopNav && (
-              <nav className="hidden lg:flex space-x-2 xl:space-x-4 flex-1 justify-center mx-2">
+              <nav className="flex space-x-2 xl:space-x-4 flex-1 justify-center mx-2">
                 {navLinks.map((link, index) => (
                   <a 
                     key={link.name}
@@ -157,22 +157,24 @@ const Header = () => {
 
 
             {/* Mobile Menu Button */}
-            <div className="lg:hidden flex items-center flex-shrink-0">
-              <button
-                onClick={toggleMenu}
-                className="text-gray-700 hover:text-yellow-600 focus:outline-none p-1.5 rounded-lg hover:bg-yellow-50 transition-all duration-300"
-                aria-label="Toggle menu"
-              >
-                {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
-              </button>
-            </div>
+            {!showDesktopNav && (
+              <div className="flex items-center flex-shrink-0">
+                <button
+                  onClick={toggleMenu}
+                  className="text-gray-700 hover:text-yellow-600 focus:outline-none p-1.5 rounded-lg hover:bg-yellow-50 transition-all duration-300"
+                  aria-label="Toggle menu"
+                >
+                  {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                </button>
+              </div>
+            )}
 
           </div>
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden bg-white shadow-2xl border-t border-yellow-200 max-h-screen overflow-y-auto">
+        {!showDesktopNav && isMenuOpen && (
+          <div className="bg-white shadow-2xl border-t border-yellow-200 max-h-screen overflow-y-auto">
             <div className="px-4 py-4">
               <nav className="flex flex-col space-y-2">
                 {navLinks.map((link) => (
