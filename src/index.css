@@ -2,8 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom utility classes */
 .text-border-red {
   color: white;
   -webkit-text-stroke: 0.1vw #dc2626; /* Tailwind red-600 */
   text-stroke: 0.1vw #dc2626; /* For broader browser support */
+}
+
+/* Loading spinner animation */
+.loading-spinner {
+  transition: opacity 0.3s ease-out;
+}
+
+.loading-spinner.fade-out {
+  opacity: 0;
+}
+
+/* Fast navigation transitions */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Prefetch hover indicator - subtle visual feedback when prefetching */
+a[data-prefetching="true"]::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, #f59e0b, #fbbf24);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease-out;
+  animation: prefetch-pulse 1s ease-in-out infinite;
+}
+
+@keyframes prefetch-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Optimize for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .page-transition-enter-active,
+  .page-transition-exit-active {
+    transition: opacity 50ms !important;
+    transform: none !important;
+  }
 }

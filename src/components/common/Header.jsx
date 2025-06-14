@@ -1,10 +1,34 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { Menu, X, Phone } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+
+// Custom Link component with prefetching capability
+const PrefetchLink = memo(({ to, children, className, onClick }) => {
+  // Handle prefetching on hover
+  const handleMouseEnter = useCallback(() => {
+    // Use the global prefetchRoute function if available
+    if (window.prefetchRoute) {
+      window.prefetchRoute(to);
+    }
+  }, [to]);
+
+  return (
+    <Link 
+      to={to} 
+      className={className} 
+      onMouseEnter={handleMouseEnter}
+      onClick={onClick}
+    >
+      {children}
+    </Link>
+  );
+});
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showDesktopNav, setShowDesktopNav] = useState(false);
+  const location = useLocation();
 
   // Handle scroll effect for header
   useEffect(() => {
@@ -20,9 +44,9 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => !prev);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,6 +59,11 @@ const Header = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
 
   const navLinks = [
     { name: 'Crown Luxe', path: '/luxe' },
@@ -54,11 +83,12 @@ const Header = () => {
           <div className="flex items-center justify-between w-full">
             {/* Responsive Luxury Logo */}
             <div className="flex-shrink-0 max-w-[65%] lg:max-w-none">
-              <a href="/" className="flex items-center group">
+              <PrefetchLink to="/" className="flex items-center group">
                 <img 
                   src="/assets/icons/logo.png" 
                   alt="LE-Crown Interiors" 
                   className="h-10 md:h-8 lg:h-10 md:mr-1 transition-transform duration-300 group-hover:scale-110"
+                  fetchpriority="high"
                 />
                 <div className="relative">
                   {/* Mobile Logo - Full Name */}
@@ -109,16 +139,16 @@ const Header = () => {
                     <div className="absolute -bottom-1 -right-1 w-1 h-1 bg-yellow-300 rounded-full opacity-50 animate-ping"></div>
                   </div>
                 </div>
-              </a>
+              </PrefetchLink>
             </div>
 
             {/* Desktop Navigation */}
             {showDesktopNav && (
               <nav className="flex space-x-2 xl:space-x-4 flex-1 justify-center mx-2">
                 {navLinks.map((link, index) => (
-                  <a 
+                  <PrefetchLink 
                     key={link.name}
-                    href={link.path}
+                    to={link.path}
                     className={`relative text-xs xl:text-sm font-semibold whitespace-nowrap transition-all duration-300 group px-1 xl:px-2 py-1 rounded-md ${
                       link.name === 'Crown Luxe' 
                         ? 'text-transparent bg-gradient-to-r from-yellow-600 to-yellow-400 bg-clip-text hover:from-yellow-500 hover:to-yellow-300' 
@@ -135,7 +165,7 @@ const Header = () => {
                         ? 'bg-gradient-to-r from-yellow-600 to-yellow-400' 
                         : 'bg-gradient-to-r from-yellow-600 to-yellow-400'
                     }`}></div>
-                  </a>
+                  </PrefetchLink>
                 ))}
               </nav>
             )}
@@ -144,14 +174,14 @@ const Header = () => {
             {/* Compact Contact Button - Desktop */}
             {showDesktopNav && (
               <div className="flex items-center flex-shrink-0 ml-2">
-                <a 
-                  href="/estimate/entire-home" 
+                <PrefetchLink 
+                  to="/estimate/entire-home" 
                   className="bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-white py-2 px-2 lg:px-3 xl:px-4 rounded-lg transition-all duration-300 text-xs font-bold flex items-center shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap"
                 >
                   <Phone size={12} className="lg:mr-1" />
                   <span className="hidden lg:inline ml-1">Estimate</span>
                   <span className="hidden xl:inline ml-1">✨</span>
-                </a>  
+                </PrefetchLink>  
               </div>
             )}
 
@@ -178,15 +208,14 @@ const Header = () => {
             <div className="px-4 py-4">
               <nav className="flex flex-col space-y-2">
                 {navLinks.map((link) => (
-                  <a 
+                  <PrefetchLink 
                     key={link.name}
-                    href={link.path}
+                    to={link.path}
                     className={`relative font-medium py-3 px-4 rounded-lg transition-all duration-300 text-sm border ${
                       link.name === 'Crown Luxe' 
                         ? 'bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-300 text-yellow-800' 
                         : 'text-gray-800 hover:text-yellow-700 hover:bg-yellow-50 border-gray-200 hover:border-yellow-300 bg-white'
                     }`}
-                    onClick={() => setIsMenuOpen(false)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
@@ -195,18 +224,17 @@ const Header = () => {
                       </div>
                       <span className="text-gray-500 text-xs">→</span>
                     </div>
-                  </a>
+                  </PrefetchLink>
                 ))}
                 <div className="border-t border-yellow-200 pt-4 mt-4">
-                  <a 
-                    href="/get-estimate"
+                  <PrefetchLink 
+                    to="/get-estimate"
                     className="block w-full text-center bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-white py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center font-semibold shadow-lg text-sm"
-                    onClick={() => setIsMenuOpen(false)}
                   >
                     <Phone size={16} className="mr-2" />
                     Get Free Estimate
                     <span className="ml-2">✨</span>
-                  </a>
+                  </PrefetchLink>
                 </div>
               </nav>
             </div>
