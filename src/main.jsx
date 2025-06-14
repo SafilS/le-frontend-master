@@ -28,7 +28,7 @@ const removeLoadingSpinner = () => {
     spinner.classList.add('fade-out');
     setTimeout(() => {
       spinner.remove();
-    }, 300);
+    }, 500);
   }
 };
 

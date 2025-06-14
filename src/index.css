@@ -11,11 +11,12 @@
 
 /* Loading spinner animation */
 .loading-spinner {
-  transition: opacity 0.3s ease-out;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
 .loading-spinner.fade-out {
   opacity: 0;
+  transform: scale(0.95);
 }
 
 /* Fast navigation transitions */

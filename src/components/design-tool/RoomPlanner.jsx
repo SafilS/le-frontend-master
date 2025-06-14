@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 
 const RoomPlanner = ({ roomType = 'living-room', onSave, onClose }) => {
-  const [selectedTool, setSelectedTool] = useState('wall');
+  const [selectedTool, setSelectedTool] = useState('move');
   const [selectedRoom, setSelectedRoom] = useState(roomType);
   const [isDrawing, setIsDrawing] = useState(false);
   const [showGrid, setShowGrid] = useState(true);
@@ -43,6 +43,8 @@ const RoomPlanner = ({ roomType = 'living-room', onSave, onClose }) => {
   const [walls, setWalls] = useState([]);
   const [furniture, setFurniture] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   const roomTypes = [
     { id: 'living-room', name: 'Living Room', icon: Sofa },
@@ -104,18 +106,30 @@ const RoomPlanner = ({ roomType = 'living-room', onSave, onClose }) => {
   };
 
   const addFurniture = (item) => {
+    // Calculate center position of the room
+    const centerX = roomDimensions.width / 2;
+    const centerY = roomDimensions.height / 2;
+    
+    // Add some randomness to avoid stacking items exactly on top of each other
+    const randomOffset = () => Math.floor(Math.random() * 60) - 30;
+    
     const newFurniture = {
       id: Date.now(),
       ...item,
-      x: 100,
-      y: 100,
+      x: centerX + randomOffset(),
+      y: centerY + randomOffset(),
       rotation: 0
     };
+    
     setFurniture(prev => [...prev, newFurniture]);
+    
+    // Automatically select the new item and set tool to move
+    setSelectedItem(newFurniture);
+    setSelectedTool('move');
   };
 
   const handleCanvasClick = (e) => {
-    if (selectedTool === 'furniture') return;
+    if (selectedTool === 'furniture' || isDragging) return;
     
     const rect = canvasRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -124,6 +138,47 @@ const RoomPlanner = ({ roomType = 'living-room', onSave, onClose }) => {
     if (selectedTool === 'wall') {
       // Add wall logic here
     }
+    
+    // Deselect item when clicking on empty canvas
+    setSelectedItem(null);
+  };
+  
+  const handleMouseDown = (e, item) => {
+    if (selectedTool !== 'move' && selectedTool !== 'furniture') return;
+    
+    e.stopPropagation();
+    setSelectedItem(item);
+    
+    const rect = canvasRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Calculate offset from the item's position
+    setDragOffset({
+      x: x - (item.x + roomDimensions.width/2 - roomDimensions.width/2),
+      y: y - (item.y + roomDimensions.height/2 - roomDimensions.height/2)
+    });
+    
+    setIsDragging(true);
+  };
+  
+  const handleMouseMove = (e) => {
+    if (!isDragging || !selectedItem) return;
+    
+    const rect = canvasRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Calculate new position with offset
+    const newX = x - dragOffset.x;
+    const newY = y - dragOffset.y;
+    
+    // Update furniture position
+    moveFurniture(selectedItem.id, newX, newY);
+  };
+  
+  const handleMouseUp = () => {
+    setIsDragging(false);
   };
 
   const moveFurniture = (id, newX, newY) => {
@@ -332,14 +387,24 @@ const RoomPlanner = ({ roomType = 'living-room', onSave, onClose }) => {
 
         {/* Canvas */}
         <div className="flex-1 relative overflow-hidden bg-gray-100">
+          {/* Helper Message */}
+          {furniture.length === 0 && (
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white/90 px-4 py-2 rounded-lg shadow-lg z-10 text-center">
+              <p className="text-gray-700 font-medium">Select furniture items from the left panel and drag them into the room</p>
+              <p className="text-gray-500 text-sm mt-1">Use the "Move" tool to position items</p>
+            </div>
+          )}
           <div
             ref={canvasRef}
-            className="w-full h-full relative cursor-crosshair"
+            className={`w-full h-full relative ${isDragging ? 'cursor-grabbing' : selectedTool === 'move' ? 'cursor-grab' : 'cursor-crosshair'}`}
             style={{
               transform: `scale(${zoomLevel / 100})`,
               transformOrigin: 'center center'
             }}
             onClick={handleCanvasClick}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
           >
             {/* Grid */}
             {showGrid && (
@@ -376,11 +441,13 @@ const RoomPlanner = ({ roomType = 'living-room', onSave, onClose }) => {
             {furniture.map(item => (
               <div
                 key={item.id}
-                className={`absolute border-2 cursor-pointer transition-all ${
+                className={`absolute border-2 transition-all ${
                   selectedItem?.id === item.id
-                    ? 'border-blue-500 shadow-lg'
+                    ? isDragging 
+                      ? 'border-green-500 shadow-xl z-10 opacity-80' 
+                      : 'border-blue-500 shadow-lg z-10'
                     : 'border-gray-400 hover:border-gray-600'
-                }`}
+                } ${selectedTool === 'move' ? isDragging && selectedItem?.id === item.id ? 'cursor-grabbing' : 'cursor-grab' : 'cursor-pointer'}`}
                 style={{
                   left: `calc(50% + ${item.x - roomDimensions.width/2}px)`,
                   top: `calc(50% + ${item.y - roomDimensions.height/2}px)`,
@@ -394,6 +461,7 @@ const RoomPlanner = ({ roomType = 'living-room', onSave, onClose }) => {
                   e.stopPropagation();
                   setSelectedItem(item);
                 }}
+                onMouseDown={(e) => handleMouseDown(e, item)}
               >
                 <div className="w-full h-full flex items-center justify-center text-white text-xs font-medium bg-black/20 rounded">
                   {item.name}

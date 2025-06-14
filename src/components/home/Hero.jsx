@@ -394,7 +394,7 @@ const Hero = () => {
 
         {/* WhatsApp Button */}
         <motion.a
-          href="https://wa.me/911234567890" 
+          href="https://wa.me/+918883958877?text=Hey%20I%20am%20from%20your%20Website" 
           className="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl flex items-center transition-all duration-300 group"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
