@@ -265,7 +265,7 @@ const Hero = () => {
                 <Phone size={20} className="mr-2" />
                 <span className="hidden sm:inline">Call Now</span>
                 <span className="sm:hidden">Call</span>
-                <span className="ml-2 text-yellow-400">+91 12345 67890</span>
+                <span className="ml-2 text-yellow-400">+91 88839 58877</span>
               </motion.a>
             </motion.div>
 

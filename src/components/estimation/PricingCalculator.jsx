@@ -171,12 +171,58 @@ const PricingCalculator = ({ estimationData, onPriceUpdate }) => {
     const hardwareType = data.materials?.hardware || 'basic';
     const qualityType = data.materials?.quality || 'basic';
 
-    const materialCost = area * pricingDatabase.materials.wood[woodType].price;
+    // Room-specific multipliers
+    const roomMultipliers = {
+      living_room: { wood: 1.2, hardware: 1.5 },
+      dining_room: { wood: 1.0, hardware: 1.0 },
+      kitchen: { wood: 1.8, hardware: 2.0 },
+      master_bedroom: { wood: 1.3, hardware: 1.5 },
+      bedroom_2: { wood: 1.0, hardware: 1.0 },
+      bedroom_3: { wood: 1.0, hardware: 1.0 },
+      bathroom_1: { wood: 0.8, hardware: 1.2 },
+      bathroom_2: { wood: 0.6, hardware: 1.0 },
+      bathroom_3: { wood: 0.6, hardware: 1.0 },
+      home_office: { wood: 1.1, hardware: 1.2 },
+      balcony: { wood: 0.5, hardware: 0.5 }
+    };
+    
+    // Determine room type for custom rooms
+    let roomType = room;
+    if (!roomMultipliers[room]) {
+      if (room.includes('bedroom')) roomType = 'bedroom_2';
+      else if (room.includes('bathroom')) roomType = 'bathroom_1';
+      else if (room.includes('office') || room.includes('study')) roomType = 'home_office';
+      else if (room.includes('dining')) roomType = 'dining_room';
+      else if (room.includes('balcony') || room.includes('terrace')) roomType = 'balcony';
+      else roomType = 'living_room'; // default
+    }
+
+    const multiplier = roomMultipliers[roomType] || { wood: 1.0, hardware: 1.0 };
+
+    const materialCost = area * pricingDatabase.materials.wood[woodType].price * multiplier.wood;
     const finishCost = wallArea * pricingDatabase.materials.finishes[finishType].price;
-    const hardwareCost = pricingDatabase.materials.hardware[hardwareType].price;
+    const hardwareCost = pricingDatabase.materials.hardware[hardwareType].price * multiplier.hardware;
     const laborCost = area * pricingDatabase.labor[qualityType].rate;
 
-    const subtotal = materialCost + finishCost + hardwareCost + laborCost;
+    // Additional features cost for entire home
+    let additionalCost = 0;
+    if (data.additionalFeatures) {
+      data.additionalFeatures.forEach(feature => {
+        const featureCosts = {
+          lighting: area * 15, // ₹15 per sq ft
+          storage: area * 25, // ₹25 per sq ft
+          automation: area * 40, // ₹40 per sq ft
+          flooring: area * 80, // ₹80 per sq ft
+          ceiling: area * 30, // ₹30 per sq ft
+          wallpaper: wallArea * 5, // ₹5 per sq ft
+          curtains: 2500, // Fixed cost per room
+          electrical: area * 12 // ₹12 per sq ft
+        };
+        additionalCost += featureCosts[feature] || 0;
+      });
+    }
+
+    const subtotal = materialCost + finishCost + hardwareCost + laborCost + additionalCost;
 
     return {
       area,
@@ -184,7 +230,8 @@ const PricingCalculator = ({ estimationData, onPriceUpdate }) => {
       materials: {
         wood: { cost: materialCost, type: woodType, rate: pricingDatabase.materials.wood[woodType].price },
         finish: { cost: finishCost, type: finishType, rate: pricingDatabase.materials.finishes[finishType].price },
-        hardware: { cost: hardwareCost, type: hardwareType }
+        hardware: { cost: hardwareCost, type: hardwareType },
+        additional: { cost: additionalCost }
       },
       labor: { cost: laborCost, type: qualityType, rate: pricingDatabase.labor[qualityType].rate },
       subtotal,
@@ -199,14 +246,44 @@ const PricingCalculator = ({ estimationData, onPriceUpdate }) => {
     const woodType = data.materials?.wood || 'plywood';
     const hardwareType = data.materials?.hardware || 'basic';
     const qualityType = data.materials?.quality || 'basic';
+    const finishType = data.finishes?.finish || 'paint';
 
     const cabinetCost = cabinetArea * pricingDatabase.materials.wood[woodType].price;
     const counterCost = area * 200; // Countertop cost per sq ft
-    const applianceCost = data.additionalFeatures?.includes('appliances') ? 150000 : 0;
+    const finishCost = cabinetArea * pricingDatabase.materials.finishes[finishType].price;
     const hardwareCost = pricingDatabase.materials.hardware[hardwareType].price;
     const laborCost = area * pricingDatabase.labor[qualityType].rate;
 
-    const subtotal = cabinetCost + counterCost + applianceCost + hardwareCost + laborCost;
+    // Additional features costs
+    let additionalCost = 0;
+    if (data.additionalFeatures) {
+      data.additionalFeatures.forEach(feature => {
+        switch (feature) {
+          case 'appliances':
+            additionalCost += 150000;
+            break;
+          case 'backsplash':
+            additionalCost += 15000;
+            break;
+          case 'lighting':
+            additionalCost += 8000;
+            break;
+          case 'accessories':
+            additionalCost += 12000;
+            break;
+          case 'countertop':
+            additionalCost += 25000;
+            break;
+          case 'sink':
+            additionalCost += 18000;
+            break;
+          default:
+            break;
+        }
+      });
+    }
+
+    const subtotal = cabinetCost + counterCost + finishCost + hardwareCost + laborCost + additionalCost;
 
     return {
       area,
@@ -214,8 +291,9 @@ const PricingCalculator = ({ estimationData, onPriceUpdate }) => {
       materials: {
         cabinets: { cost: cabinetCost, type: woodType },
         counter: { cost: counterCost },
-        appliances: { cost: applianceCost },
-        hardware: { cost: hardwareCost, type: hardwareType }
+        finish: { cost: finishCost, type: finishType },
+        hardware: { cost: hardwareCost, type: hardwareType },
+        additional: { cost: additionalCost }
       },
       labor: { cost: laborCost, type: qualityType },
       subtotal,
@@ -310,8 +388,10 @@ const PricingCalculator = ({ estimationData, onPriceUpdate }) => {
           {Object.entries(detailedBreakdown).map(([key, data]) => (
             key !== 'additional' && (
               <div key={key} className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold mb-3 capitalize flex items-center">
-                  {key.replace('_', ' ')}
+                <h4 className="font-semibold mb-3 flex items-center">
+                  {key.includes('_') 
+                    ? key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') 
+                    : key.charAt(0).toUpperCase() + key.slice(1)}
                   <span className="ml-2 text-sm text-gray-500">
                     ({data.area?.toFixed(1)} sq ft)
                   </span>

@@ -95,7 +95,26 @@ const RoomCanvas = ({ dimensions, roomType, onDimensionChange }) => {
     ctx.strokeStyle = '#D97706';
     ctx.lineWidth = 2;
 
-    switch (type) {
+    // Determine the room category based on the room type
+    let roomCategory = 'generic';
+    
+    if (type === 'kitchen') {
+      roomCategory = 'kitchen';
+    } else if (type === 'living_room') {
+      roomCategory = 'living_room';
+    } else if (type === 'dining_room') {
+      roomCategory = 'dining_room';
+    } else if (type.includes('bedroom') || type.includes('master')) {
+      roomCategory = 'bedroom';
+    } else if (type.includes('bathroom')) {
+      roomCategory = 'bathroom';
+    } else if (type.includes('office') || type.includes('study')) {
+      roomCategory = 'office';
+    } else if (type.includes('balcony') || type.includes('terrace')) {
+      roomCategory = 'balcony';
+    }
+
+    switch (roomCategory) {
       case 'kitchen':
         // Draw kitchen cabinets
         // Upper cabinets
@@ -126,6 +145,16 @@ const RoomCanvas = ({ dimensions, roomType, onDimensionChange }) => {
         ctx.fillRect(startX + 20, startY + 20, roomWidth - 40, 20);
         ctx.strokeRect(startX + 20, startY + 20, roomWidth - 40, 20);
         break;
+
+      case 'dining_room':
+        // Dining table
+        ctx.fillRect(startX + roomWidth/2 - 50, startY + roomLength/2 - 30, 100, 60);
+        ctx.strokeRect(startX + roomWidth/2 - 50, startY + roomLength/2 - 30, 100, 60);
+        
+        // Dining cabinet
+        ctx.fillRect(startX + 10, startY + 10, roomWidth - 20, 25);
+        ctx.strokeRect(startX + 10, startY + 10, roomWidth - 20, 25);
+        break;
         
       case 'bedroom':
         // Bed
@@ -135,12 +164,61 @@ const RoomCanvas = ({ dimensions, roomType, onDimensionChange }) => {
         // Wardrobe
         ctx.fillRect(startX + 10, startY + 10, 30, roomLength - 20);
         ctx.strokeRect(startX + 10, startY + 10, 30, roomLength - 20);
+        
+        // Study table (for master bedroom)
+        if (type.includes('master')) {
+          ctx.fillRect(startX + roomWidth - 60, startY + 20, 50, 25);
+          ctx.strokeRect(startX + roomWidth - 60, startY + 20, 50, 25);
+        }
+        break;
+
+      case 'bathroom':
+        // Vanity
+        ctx.fillRect(startX + 10, startY + 10, roomWidth - 20, 20);
+        ctx.strokeRect(startX + 10, startY + 10, roomWidth - 20, 20);
+        
+        // Shower area
+        ctx.fillRect(startX + 10, startY + roomLength - 50, 40, 40);
+        ctx.strokeRect(startX + 10, startY + roomLength - 50, 40, 40);
+        
+        // WC
+        ctx.fillRect(startX + roomWidth - 30, startY + roomLength - 50, 20, 20);
+        ctx.strokeRect(startX + roomWidth - 30, startY + roomLength - 50, 20, 20);
+        break;
+
+      case 'office':
+        // Desk
+        ctx.fillRect(startX + 20, startY + 20, roomWidth - 40, 30);
+        ctx.strokeRect(startX + 20, startY + 20, roomWidth - 40, 30);
+        
+        // Bookshelf
+        ctx.fillRect(startX + 10, startY + 60, 25, roomLength - 80);
+        ctx.strokeRect(startX + 10, startY + 60, 25, roomLength - 80);
+        
+        // Chair area
+        ctx.fillRect(startX + roomWidth/2 - 15, startY + 60, 30, 30);
+        ctx.strokeRect(startX + roomWidth/2 - 15, startY + 60, 30, 30);
+        break;
+
+      case 'balcony':
+        // Seating area
+        ctx.fillRect(startX + 20, startY + roomLength - 40, roomWidth - 40, 30);
+        ctx.strokeRect(startX + 20, startY + roomLength - 40, roomWidth - 40, 30);
+        
+        // Planter boxes
+        ctx.fillRect(startX + 10, startY + 10, 20, roomLength - 60);
+        ctx.strokeRect(startX + 10, startY + 10, 20, roomLength - 60);
         break;
         
       default:
-        // Generic furniture
-        ctx.fillRect(startX + 20, startY + 20, 40, 40);
-        ctx.strokeRect(startX + 20, startY + 20, 40, 40);
+        // Generic furniture - for custom room types
+        // Simple table
+        ctx.fillRect(startX + roomWidth/2 - 30, startY + roomLength/2 - 20, 60, 40);
+        ctx.strokeRect(startX + roomWidth/2 - 30, startY + roomLength/2 - 20, 60, 40);
+        
+        // Simple storage
+        ctx.fillRect(startX + 15, startY + 15, 30, roomWidth/4);
+        ctx.strokeRect(startX + 15, startY + 15, 30, roomWidth/4);
     }
   };
 
@@ -230,7 +308,7 @@ const RoomCanvas = ({ dimensions, roomType, onDimensionChange }) => {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold">Room Visualizer</h3>
+        <h3 className="text-lg font-semibold">{roomType.includes('_') ? roomType.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : roomType.charAt(0).toUpperCase() + roomType.slice(1)} Visualizer</h3>
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setScale(Math.max(0.5, scale - 0.1))}

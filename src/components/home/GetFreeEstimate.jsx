@@ -193,10 +193,11 @@ const GetFreeEstimate = () => {
               {/* Features */}
               <ul className="space-y-2 mb-8">
                 {[
-                  'All rooms included',
-                  'Material breakdown',
-                  'Labor cost analysis',
-                  '3D visualization preview'
+                  '10+ rooms included',
+                  'Living, dining, bedrooms',
+                  'Bathrooms & kitchen',
+                  'Home office & balcony',
+                  'Real-time 3D preview'
                 ].map((feature, index) => (
                   <li key={index} className="flex items-center text-sm text-gray-600">
                     <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
@@ -281,6 +282,55 @@ const GetFreeEstimate = () => {
             <div className="absolute top-4 right-4 w-20 h-20 bg-gradient-to-r from-orange-100 to-red-100 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500"></div>
             <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-r from-red-100 to-orange-100 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500"></div>
           </motion.div>
+        </motion.div>
+
+        {/* Room Types Preview */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          className="mt-16"
+        >
+          <div className="text-center mb-12">
+            <motion.h3 
+              variants={itemVariants}
+              className="text-3xl font-bold text-gray-900 mb-4"
+            >
+              What's Included in Your Estimate?
+            </motion.h3>
+            <motion.p 
+              variants={itemVariants}
+              className="text-lg text-gray-600 max-w-2xl mx-auto"
+            >
+              Get detailed pricing for every room in your home with our comprehensive estimation tool
+            </motion.p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto mb-12">
+            {[
+              { name: 'Living Room', icon: '🛋️', color: 'bg-blue-100 text-blue-700' },
+              { name: 'Dining Room', icon: '🍽️', color: 'bg-green-100 text-green-700' },
+              { name: 'Kitchen', icon: '👨‍🍳', color: 'bg-orange-100 text-orange-700' },
+              { name: 'Master Bedroom', icon: '🛏️', color: 'bg-purple-100 text-purple-700' },
+              { name: 'Bedrooms', icon: '🛏️', color: 'bg-pink-100 text-pink-700' },
+              { name: 'Bathrooms', icon: '🚿', color: 'bg-cyan-100 text-cyan-700' },
+              { name: 'Home Office', icon: '💻', color: 'bg-indigo-100 text-indigo-700' },
+              { name: 'Balcony', icon: '🌿', color: 'bg-emerald-100 text-emerald-700' },
+              { name: 'Storage', icon: '🗄️', color: 'bg-gray-100 text-gray-700' },
+              { name: 'Lighting', icon: '💡', color: 'bg-yellow-100 text-yellow-700' }
+            ].map((room, index) => (
+              <motion.div
+                key={room.name}
+                variants={itemVariants}
+                whileHover={{ scale: 1.05, y: -5 }}
+                className={`${room.color} rounded-xl p-4 text-center transition-all duration-300 hover:shadow-lg`}
+              >
+                <div className="text-2xl mb-2">{room.icon}</div>
+                <div className="text-sm font-medium">{room.name}</div>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
 
         {/* Bottom CTA */}

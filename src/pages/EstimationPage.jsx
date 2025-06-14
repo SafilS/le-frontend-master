@@ -80,17 +80,47 @@ const EstimationPage = () => {
     if (isEntireHome) {
       // Calculate for entire home
       Object.entries(estimationData.dimensions).forEach(([room, dims]) => {
-        if (dims.length && dims.width && dims.height) {
+        if (dims && dims.length && dims.width && dims.height) {
           const area = parseFloat(dims.length) * parseFloat(dims.width);
           const wallArea = 2 * (parseFloat(dims.length) + parseFloat(dims.width)) * parseFloat(dims.height);
           
-          // Material costs
-          const materialCost = area * (pricingData.materials.wood[estimationData.materials[room]?.wood || 'plywood']?.price || 150);
-          const finishCost = wallArea * (pricingData.materials.finishes[estimationData.finishes[room]?.finish || 'paint']?.price || 30);
-          const hardwareCost = pricingData.materials.hardware[estimationData.materials[room]?.hardware || 'basic']?.price || 2000;
+          // Default values for materials if not specified
+          const defaultWood = 'plywood';
+          const defaultFinish = 'paint';
+          const defaultHardware = 'basic';
+          const defaultQuality = 'basic';
+          
+          // Material costs - handle custom rooms that might not have materials specified
+          const materialCost = area * (
+            pricingData.materials.wood[
+              estimationData.materials[room]?.wood || 
+              estimationData.materials.wood || 
+              defaultWood
+            ]?.price || 150
+          );
+          
+          const finishCost = wallArea * (
+            pricingData.materials.finishes[
+              estimationData.finishes[room]?.finish || 
+              estimationData.finishes.finish || 
+              defaultFinish
+            ]?.price || 30
+          );
+          
+          const hardwareCost = 
+            pricingData.materials.hardware[
+              estimationData.materials[room]?.hardware || 
+              estimationData.materials.hardware || 
+              defaultHardware
+            ]?.price || 2000;
           
           // Labor costs
-          const laborRate = pricingData.labor[estimationData.materials[room]?.quality || 'basic'];
+          const laborRate = pricingData.labor[
+            estimationData.materials[room]?.quality || 
+            estimationData.materials.quality || 
+            defaultQuality
+          ] || 40;
+          
           const laborCost = area * laborRate;
           
           const roomTotal = materialCost + finishCost + hardwareCost + laborCost;
@@ -181,7 +211,7 @@ const EstimationPage = () => {
       case 4:
         return <TimelineStep 
           data={estimationData.timeline} 
-          onChange={(value) => handleInputChange('timeline', 'selected', value)}
+          onChange={(value) => setEstimationData(prev => ({ ...prev, timeline: value }))}
         />;
       case 5:
         return <FeaturesStep 
@@ -311,9 +341,12 @@ const EstimationPage = () => {
 
 // Step Components
 const DimensionsStep = ({ isEntireHome, data, onChange }) => {
-  const rooms = isEntireHome 
+  const [customRooms, setCustomRooms] = useState(isEntireHome 
     ? ['living_room', 'kitchen', 'master_bedroom', 'bedroom_2', 'bathroom_1', 'bathroom_2']
-    : ['kitchen'];
+    : ['kitchen']);
+  
+  const [newRoomType, setNewRoomType] = useState('');
+  const [newRoomName, setNewRoomName] = useState('');
 
   const roomLabels = {
     living_room: 'Living Room',
@@ -321,7 +354,36 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
     master_bedroom: 'Master Bedroom',
     bedroom_2: 'Bedroom 2',
     bathroom_1: 'Bathroom 1',
-    bathroom_2: 'Bathroom 2'
+    bathroom_2: 'Bathroom 2',
+    home_office: 'Home Office',
+    dining_room: 'Dining Room',
+    balcony: 'Balcony',
+    bedroom_3: 'Bedroom 3',
+    bathroom_3: 'Bathroom 3'
+  };
+
+  const addNewRoom = () => {
+    if (newRoomType && !customRooms.includes(newRoomType)) {
+      setCustomRooms([...customRooms, newRoomType]);
+      setNewRoomType('');
+    } else if (newRoomName) {
+      // Create a custom room ID based on the name
+      const customRoomId = newRoomName.toLowerCase().replace(/\s+/g, '_');
+      if (!customRooms.includes(customRoomId)) {
+        // Add the custom room ID to the list
+        setCustomRooms([...customRooms, customRoomId]);
+        // Add the custom room label
+        roomLabels[customRoomId] = newRoomName;
+        setNewRoomName('');
+      }
+    }
+  };
+
+  const removeRoom = (roomToRemove) => {
+    // Don't allow removing the kitchen for kitchen estimation
+    if (!isEntireHome && roomToRemove === 'kitchen') return;
+    
+    setCustomRooms(customRooms.filter(room => room !== roomToRemove));
   };
 
   return (
@@ -332,15 +394,68 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
       </h2>
       <p className="text-gray-600 mb-8">Enter the dimensions for each room in feet.</p>
       
+      {/* Add Room Controls */}
+      {isEntireHome && (
+        <div className="mb-8 p-4 border border-dashed border-blue-300 rounded-lg bg-blue-50">
+          <h3 className="text-lg font-semibold mb-3">Add a Room</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Select Room Type</label>
+              <select
+                value={newRoomType}
+                onChange={(e) => setNewRoomType(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select a room type</option>
+                <option value="home_office">Home Office</option>
+                <option value="dining_room">Dining Room</option>
+                <option value="bedroom_3">Bedroom 3</option>
+                <option value="bathroom_3">Bathroom 3</option>
+                <option value="balcony">Balcony</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Or Custom Room Name</label>
+              <input
+                type="text"
+                value={newRoomName}
+                onChange={(e) => setNewRoomName(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                placeholder="e.g. Study Room"
+              />
+            </div>
+            <div className="flex items-end">
+              <button
+                onClick={addNewRoom}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                disabled={!newRoomType && !newRoomName}
+              >
+                Add Room
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <div className="grid gap-6">
-        {rooms.map(room => (
+        {customRooms.map(room => (
           <motion.div
             key={room}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="border border-gray-200 rounded-lg p-6"
           >
-            <h3 className="text-lg font-semibold mb-4">{roomLabels[room]}</h3>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">{roomLabels[room] || room}</h3>
+              {isEntireHome && customRooms.length > 1 && (
+                <button 
+                  onClick={() => removeRoom(room)}
+                  className="text-red-500 hover:text-red-700 text-sm"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Length (ft)</label>
@@ -379,16 +494,14 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
               </div>
             )}
             
-            {/* Room Canvas for the first room or kitchen */}
-            {((isEntireHome && room === 'living_room') || (!isEntireHome && room === 'kitchen')) && (
-              <div className="mt-6">
-                <RoomCanvas
-                  dimensions={data[room] || {}}
-                  roomType={room}
-                  onDimensionChange={(field, value) => onChange(room, value, field)}
-                />
-              </div>
-            )}
+            {/* Room Canvas for all rooms */}
+            <div className="mt-6">
+              <RoomCanvas
+                dimensions={data[room] || {}}
+                roomType={room}
+                onDimensionChange={(field, value) => onChange(room, value, field)}
+              />
+            </div>
           </motion.div>
         ))}
       </div>
@@ -402,6 +515,27 @@ const MaterialsStep = ({ isEntireHome, data, onChange }) => {
     { id: 'premium', name: 'Premium Quality', description: 'Enhanced finishing' },
     { id: 'luxury', name: 'Luxury Quality', description: 'Finest craftsmanship' }
   ];
+  
+  // Get all rooms from dimensions data for entire home
+  const rooms = isEntireHome 
+    ? Object.keys(data.dimensions || {})
+    : ['kitchen'];
+  
+  const [selectedRoom, setSelectedRoom] = useState(rooms[0] || 'all');
+  
+  // Handle room selection change
+  const handleRoomChange = (e) => {
+    setSelectedRoom(e.target.value);
+  };
+  
+  // Handle material change for specific room or all rooms
+  const handleMaterialChange = (field, value) => {
+    if (selectedRoom === 'all') {
+      onChange(field, value);
+    } else {
+      onChange(selectedRoom, value, field);
+    }
+  };
 
   return (
     <div>
@@ -410,19 +544,39 @@ const MaterialsStep = ({ isEntireHome, data, onChange }) => {
         Materials & Quality
       </h2>
       
+      {isEntireHome && (
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Select Room</label>
+          <select
+            value={selectedRoom}
+            onChange={handleRoomChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">All Rooms</option>
+            {rooms.map(room => (
+              <option key={room} value={room}>
+                {room.includes('_') 
+                  ? room.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') 
+                  : room.charAt(0).toUpperCase() + room.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+      
       <div className="space-y-8">
         {/* Wood Type */}
         <MaterialSelector
-          selectedMaterial={data.wood}
-          onMaterialChange={(value) => onChange('wood', value)}
+          selectedMaterial={selectedRoom === 'all' ? data.wood : data[selectedRoom]?.wood}
+          onMaterialChange={(value) => handleMaterialChange('wood', value)}
           category="wood"
           title="Wood Type"
         />
 
         {/* Hardware */}
         <MaterialSelector
-          selectedMaterial={data.hardware}
-          onMaterialChange={(value) => onChange('hardware', value)}
+          selectedMaterial={selectedRoom === 'all' ? data.hardware : data[selectedRoom]?.hardware}
+          onMaterialChange={(value) => handleMaterialChange('hardware', value)}
           category="hardware"
           title="Hardware Quality"
         />
@@ -436,9 +590,11 @@ const MaterialsStep = ({ isEntireHome, data, onChange }) => {
                 key={q.id}
                 whileHover={{ scale: 1.02 }}
                 className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                  data.quality === q.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                  (selectedRoom === 'all' ? data.quality : data[selectedRoom]?.quality) === q.id 
+                    ? 'border-blue-500 bg-blue-50' 
+                    : 'border-gray-200 hover:border-gray-300'
                 }`}
-                onClick={() => onChange('quality', q.id)}
+                onClick={() => handleMaterialChange('quality', q.id)}
               >
                 <div className="text-center">
                   <h4 className="font-semibold mb-2">{q.name}</h4>
@@ -454,6 +610,27 @@ const MaterialsStep = ({ isEntireHome, data, onChange }) => {
 };
 
 const FinishesStep = ({ isEntireHome, data, onChange }) => {
+  // Get all rooms from dimensions data for entire home
+  const rooms = isEntireHome 
+    ? Object.keys(data.dimensions || {})
+    : ['kitchen'];
+  
+  const [selectedRoom, setSelectedRoom] = useState(rooms[0] || 'all');
+  
+  // Handle room selection change
+  const handleRoomChange = (e) => {
+    setSelectedRoom(e.target.value);
+  };
+  
+  // Handle finish change for specific room or all rooms
+  const handleFinishChange = (value) => {
+    if (selectedRoom === 'all') {
+      onChange('finish', value);
+    } else {
+      onChange(selectedRoom, value, 'finish');
+    }
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6 flex items-center">
@@ -461,9 +638,29 @@ const FinishesStep = ({ isEntireHome, data, onChange }) => {
         Finishes & Colors
       </h2>
       
+      {isEntireHome && (
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Select Room</label>
+          <select
+            value={selectedRoom}
+            onChange={handleRoomChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">All Rooms</option>
+            {rooms.map(room => (
+              <option key={room} value={room}>
+                {room.includes('_') 
+                  ? room.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') 
+                  : room.charAt(0).toUpperCase() + room.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+      
       <MaterialSelector
-        selectedMaterial={data.finish}
-        onMaterialChange={(value) => onChange('finish', value)}
+        selectedMaterial={selectedRoom === 'all' ? data.finish : data[selectedRoom]?.finish}
+        onMaterialChange={handleFinishChange}
         category="finishes"
         title="Surface Finishes"
       />
