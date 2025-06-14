@@ -11,6 +11,7 @@ export const HeroImageProvider = ({ children }) => {
     lastFetched: null
   });
 
+  
   // Memoize fallback images to prevent unnecessary re-renders
   const fallbackImages = useMemo(() => ({
     desktop: [
