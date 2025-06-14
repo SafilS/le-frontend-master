@@ -202,7 +202,8 @@ const Hero = () => {
             initial="hidden"
             animate="visible"
           >
-            
+
+
             <motion.div 
               className="flex items-center justify-center mb-6"
               variants={itemVariants}
