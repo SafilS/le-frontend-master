@@ -203,12 +203,7 @@ const HomePage = () => {
   return (
     <div className="homepage">
       {/* Hero Section */}
-      <Hero 
-        headline="Transform Your Space with Timeless Elegance"
-        subheadline="Where luxury meets functionality, creating spaces that tell your unique story."
-        ctaText="Book a Consultation"
-        backgroundImage="/assets/images/livespace1.jpg"
-      />
+      <Hero />
 
       <motion.section 
         className="services-section"

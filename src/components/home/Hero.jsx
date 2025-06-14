@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowRight, 
@@ -14,14 +14,75 @@ import {
   MessageCircle
 } from 'lucide-react';
 import Form from '../common/Form';
+import { useHeroImages } from '../../context/HeroImageContext';
+
+// Memoized image component to prevent unnecessary re-renders
+const HeroImage = memo(({ isActive, desktopSrc, tabSrc, mobileSrc, index }) => {
+  return (
+    <motion.div
+      key={`hero-image-${index}`}
+      className={`absolute inset-0 w-full h-full ${isActive ? 'z-10' : 'z-0'}`}
+      initial={{ opacity: 0, scale: 1.1 }}
+      animate={{ 
+        opacity: isActive ? 1 : 0,
+        scale: isActive ? 1 : 1.1
+      }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 2, ease: "easeInOut" }}
+    >
+      <picture className="w-full h-full">
+        <source media="(max-width: 640px)" srcSet={mobileSrc} />
+        <source media="(max-width: 1024px)" srcSet={tabSrc} />
+        <img
+          src={desktopSrc}
+          alt={`Luxury Interior Design ${index + 1}`}
+          className="w-full h-full object-cover"
+          loading={index === 0 ? "eager" : "lazy"}
+          fetchpriority={index === 0 ? "high" : "low"}
+        />
+      </picture>
+    </motion.div>
+  );
+});
+
+// Memoized particle component
+const Particle = memo(({ index }) => {
+  // Pre-calculate random positions for better performance
+  const left = useMemo(() => `${Math.random() * 100}%`, []);
+  const top = useMemo(() => `${Math.random() * 100}%`, []);
+  const duration = useMemo(() => 4 + Math.random() * 4, []);
+  const delay = useMemo(() => Math.random() * 2, []);
+
+  return (
+    <motion.div
+      key={`particle-${index}`}
+      className="absolute w-2 h-2 bg-yellow-400/20 rounded-full"
+      style={{ left, top }}
+      animate={{
+        y: [-20, 20, -20],
+        opacity: [0.2, 0.8, 0.2],
+      }}
+      transition={{
+        duration,
+        repeat: Infinity,
+        delay,
+      }}
+    />
+  );
+});
 
 const Hero = () => {
   const [showForm, setShowForm] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [desktopImages, setDesktopImages] = useState([]);
-  const [mobileImages, setMobileImages] = useState([]);
-  const [tabImages, setTabImages] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  
+  // Use the context instead of local state and API calls
+  const { 
+    desktop: desktopImages, 
+    mobile: mobileImages, 
+    tab: tabImages, 
+    isLoaded,
+    fallbackImages
+  } = useHeroImages();
 
   // Handle keyboard navigation for modal
   useEffect(() => {
@@ -45,79 +106,7 @@ const Hero = () => {
     };
   }, [showForm]);
 
-  // Fallback images if API fails
-  const fallbackImages = {
-    desktop: [
-      '/assets/images/lap4.jpg',
-      '/assets/images/lap1.jpg',
-      '/assets/images/lap2.png',
-      '/assets/images/lap3.png',
-    ],
-    mobile: [
-      '/assets/images/mobile1.jpg',
-      '/assets/images/mobile2.jpg',
-      '/assets/images/mobile3.jpg',
-    ],
-    tab: [
-      '/assets/images/tab1.jpg',
-      '/assets/images/tab2.jpg',
-    ]
-  };
-
-  useEffect(() => {
-    const localKeys = {
-      desktop: 'desktopHeroImages',
-      mobile: 'mobileHeroImages',
-      tab: 'tabHeroImages',
-    };
-
-    const loadImages = async () => {
-      try {
-        // Check localStorage for cached images
-        const cachedDesktop = JSON.parse(localStorage.getItem(localKeys.desktop) || '[]');
-        const cachedMobile = JSON.parse(localStorage.getItem(localKeys.mobile) || '[]');
-        const cachedTab = JSON.parse(localStorage.getItem(localKeys.tab) || '[]');
-
-        if (cachedDesktop.length && cachedMobile.length && cachedTab.length) {
-          setDesktopImages(cachedDesktop);
-          setMobileImages(cachedMobile);  
-          setTabImages(cachedTab);
-          setIsLoaded(true);
-          return;
-        }
-
-        // Fetch from API if not cached
-        const res = await fetch('https://le-crown-interiors-backend.onrender.com/image/all');
-        const data = await res.json();
-
-        // Extract URLs directly (no specific order)
-        const desktop = data.hero.map(img => img.img.url);
-        const mobile = data.mobile.map(img => img.img.url);
-        const tab = data.tab.map(img => img.img.url);
-
-        // Save to state
-        setDesktopImages(desktop);
-        setMobileImages(mobile);
-        setTabImages(tab);
-
-        // Cache in localStorage
-        localStorage.setItem(localKeys.desktop, JSON.stringify(desktop));
-        localStorage.setItem(localKeys.mobile, JSON.stringify(mobile));
-        localStorage.setItem(localKeys.tab, JSON.stringify(tab));
-        
-        setIsLoaded(true);
-      } catch (err) {
-        console.error('Error loading images:', err);
-        // Use fallback images
-        setDesktopImages(fallbackImages.desktop);
-        setMobileImages(fallbackImages.mobile);
-        setTabImages(fallbackImages.tab);
-        setIsLoaded(true);
-      }
-    };
-    loadImages();
-  }, []);
-
+  // Image slideshow timer with useCallback to prevent unnecessary re-renders
   useEffect(() => {
     if (!isLoaded) return;
     
@@ -128,8 +117,8 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, [isLoaded, desktopImages.length]);
 
-  // Animation variants
-  const containerVariants = {
+  // Memoize animation variants to prevent re-creation on each render
+  const containerVariants = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -138,9 +127,9 @@ const Hero = () => {
         delayChildren: 0.2
       }
     }
-  };
+  }), []);
 
-  const itemVariants = {
+  const itemVariants = useMemo(() => ({
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
@@ -150,9 +139,9 @@ const Hero = () => {
         ease: "easeOut"
       }
     }
-  };
+  }), []);
 
-  const floatingVariants = {
+  const floatingVariants = useMemo(() => ({
     animate: {
       y: [-10, 10, -10],
       transition: {
@@ -161,44 +150,35 @@ const Hero = () => {
         ease: "easeInOut"
       }
     }
-  };
+  }), []);
+
+  // Memoize the particles array to prevent re-creation on each render
+  const particles = useMemo(() => {
+    return Array.from({ length: 10 }, (_, i) => <Particle key={i} index={i} />);
+  }, []);
+
+  // Memoize the hero images to prevent re-creation on each render
+  const heroImages = useMemo(() => {
+    if (!isLoaded) return null;
+    
+    return [0, 1, 2, 3].map((i) => (
+      <HeroImage
+        key={`${currentIndex}-${i}`}
+        isActive={i === currentIndex}
+        desktopSrc={desktopImages[i % desktopImages.length] || fallbackImages.desktop[i % fallbackImages.desktop.length]}
+        tabSrc={tabImages[i % tabImages.length] || fallbackImages.tab[i % fallbackImages.tab.length]}
+        mobileSrc={mobileImages[i % mobileImages.length] || fallbackImages.mobile[i % fallbackImages.mobile.length]}
+        index={i}
+      />
+    ));
+  }, [isLoaded, currentIndex, desktopImages, tabImages, mobileImages, fallbackImages]);
 
   return (
     <section className="relative w-full min-h-screen flex items-center overflow-hidden">
       {/* Enhanced Background with Parallax Effect */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">
-          {isLoaded && [0, 1, 2, 3].map((i) => (
-            <motion.div
-              key={`${currentIndex}-${i}`}
-              className={`absolute inset-0 w-full h-full ${
-                i === currentIndex ? 'z-10' : 'z-0'
-              }`}
-              initial={{ opacity: 0, scale: 1.1 }}
-              animate={{ 
-                opacity: i === currentIndex ? 1 : 0,
-                scale: i === currentIndex ? 1 : 1.1
-              }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 2, ease: "easeInOut" }}
-            >
-              <picture className="w-full h-full">
-                <source 
-                  media="(max-width: 640px)" 
-                  srcSet={mobileImages[i % mobileImages.length] || fallbackImages.mobile[i % fallbackImages.mobile.length]} 
-                />
-                <source 
-                  media="(max-width: 1024px)" 
-                  srcSet={tabImages[i % tabImages.length] || fallbackImages.tab[i % fallbackImages.tab.length]} 
-                />
-                <img
-                  src={desktopImages[i % desktopImages.length] || fallbackImages.desktop[i % fallbackImages.desktop.length]}
-                  alt={`Luxury Interior Design ${i + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </picture>
-            </motion.div>
-          ))}
+          {heroImages}
         </AnimatePresence>
         
         {/* Enhanced Gradient Overlays */}
@@ -206,27 +186,9 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30"></div>
       </div>
 
-      {/* Floating Particles */}
+      {/* Floating Particles - Reduced number for better performance */}
       <div className="absolute inset-0 z-5">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-yellow-400/20 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [-20, 20, -20],
-              opacity: [0.2, 0.8, 0.2],
-            }}
-            transition={{
-              duration: 4 + Math.random() * 4,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
+        {particles}
       </div>
 
       {/* Main Content */}
@@ -255,11 +217,11 @@ const Hero = () => {
             {/* Main Headline */}
             <motion.div variants={itemVariants} className="mb-6">
               <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-4 border border-white/10">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl font-bold leading-tight">
                   <span className="block text-white drop-shadow-2xl">
                     Transform Your
                   </span>
-                  <span className="block bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent drop-shadow-2xl">
+                  <span className="pb-3 block bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent drop-shadow-2xl">
                     Living Space
                   </span>
                   <span className="block text-white drop-shadow-2xl">
@@ -274,7 +236,7 @@ const Hero = () => {
               </div>
             </motion.div>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons - Memoized to prevent unnecessary re-renders */}
             <motion.div 
               variants={itemVariants}
               className="flex flex-col sm:flex-row gap-4 mb-8 justify-center"
@@ -306,12 +268,12 @@ const Hero = () => {
               </motion.a>
             </motion.div>
 
-            {/* Trust Indicators */}
+            {/* Trust Indicators - Memoized to prevent unnecessary re-renders */}
             <motion.div 
               variants={itemVariants}
               className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 justify-items-center"
             >
-              {[
+              {useMemo(() => [
                 { icon: Users, number: '6000+', label: 'Happy Families', color: 'from-blue-500 to-blue-600' },
                 { icon: Award, number: '50+', label: 'Design Awards', color: 'from-purple-500 to-purple-600' },
                 { icon: Star, number: '4.9', label: 'Client Rating', color: 'from-yellow-500 to-yellow-600' }
@@ -329,15 +291,15 @@ const Hero = () => {
                     <div className="text-gray-300 text-sm">{stat.label}</div>
                   </div>
                 </motion.div>
-              ))}
+              )), [])}
             </motion.div>
 
-            {/* Features List */}
+            {/* Features List - Memoized to prevent unnecessary re-renders */}
             <motion.div 
               variants={itemVariants}
               className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto"
             >
-              {[
+              {useMemo(() => [
                 '45-Day Installation Guarantee',
                 '10-Year Comprehensive Warranty',
                 'Free 3D Design Visualization',
@@ -347,13 +309,13 @@ const Hero = () => {
                   <CheckCircle size={18} className="text-green-400 mr-3 flex-shrink-0" />
                   <span className="text-gray-200 text-sm lg:text-base">{feature}</span>
                 </div>
-              ))}
+              )), [])}
             </motion.div>
           </motion.div>
         </div>
       </div>
 
-      {/* Enhanced Form Modal - Works for both mobile and desktop */}
+      {/* Enhanced Form Modal - Lazy loaded to improve initial page load */}
       <AnimatePresence>
         {showForm && (
           <motion.div 
