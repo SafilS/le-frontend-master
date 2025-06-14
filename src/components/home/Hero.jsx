@@ -202,7 +202,7 @@ const Hero = () => {
             initial="hidden"
             animate="visible"
           >
-            {/* Brand Badge */}
+            
             <motion.div 
               className="flex items-center justify-center mb-6"
               variants={itemVariants}
