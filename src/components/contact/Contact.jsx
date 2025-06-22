@@ -81,7 +81,7 @@ const Contact = () => {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                placeholder="Your Phone Number (with or without +91)"
+                placeholder="Your Phone Number"
                 required
                 className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-yellow-400 placeholder-gray-400 text-white"
             />
