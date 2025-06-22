@@ -24,7 +24,7 @@ import DesignGalleryPage from './pages/DesignGalleryPage';
 import { DesignProvider } from './context/DesignContext';
 import { HeroImageProvider } from './context/HeroImageContext';
 import Contact from './components/contact/Contact';
-import Chatbot  from './components/chatbot/ChatBot';
+import Chatbot  from './components/chatbot/Chatbot';
 
 
 const routes = [
