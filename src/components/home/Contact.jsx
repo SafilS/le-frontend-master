@@ -26,7 +26,7 @@ const Contact = () => {
     {
       icon: Phone,
       title: "Call Us",
-      details: ["+91 98765 43210", "+91 87654 32109"],
+      details: ["Mansoor Ali Sirajuthin","+91 88839 58877"],
       description: "Speak directly with our design consultants",
       action: "tel:+919876543210"
     },
@@ -40,9 +40,9 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "Visit Our Studio",
-      details: ["123 Design Avenue", "Luxury District, Mumbai 400001"],
+      details: ["D.No 3, Balaji Nagar, Kuniyamuthur", "Coimbatore - 641008, Tamil Nadu, India"],
       description: "Experience our designs in person",
-      action: "https://maps.google.com"
+      action: "https://g.co/kgs/HJMQqLu"
     },
     {
       icon: Clock,

@@ -22,7 +22,7 @@ import EstimationTest from './components/estimation/EstimationTest';
 import DesignGalleryPage from './pages/DesignGalleryPage';
 import { DesignProvider } from './context/DesignContext';
 import { HeroImageProvider } from './context/HeroImageContext';
-
+import { Chatbot } from './components/chatbot/ChatBot';
 // Route configuration with metadata for preloading
 const routes = [
   { path: '/', component: HomePage, preload: true },
@@ -115,10 +115,12 @@ function App() {
               ))}
             </Routes>
             <Footer />
+            <Chatbot />
           </RouteHandler>
         </BrowserRouter>
       </DesignProvider>
     </HeroImageProvider>
+
   );
 }
 

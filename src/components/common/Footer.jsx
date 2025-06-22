@@ -230,7 +230,7 @@ const Footer = () => {
                     </div>
                     <div>
                       <p className="text-gray-300 font-medium">Visit Our Showroom</p>
-                      <p className="text-gray-400 text-sm">123 Design Street, New York, NY 10001</p>
+                      <p className="text-gray-400 text-sm">D.No 3, Balaji Nagar, Kuniyamuthur, Coimbatore</p>
                     </div>
                   </div>
 
@@ -240,7 +240,7 @@ const Footer = () => {
                     </div>
                     <div>
                       <p className="text-gray-300 font-medium">Call Us</p>
-                      <p className="text-gray-400 text-sm">(555) 123-4567</p>
+                      <p className="text-gray-400 text-sm">+91 88839 58877</p>
                     </div>
                   </div>
 
@@ -271,10 +271,10 @@ const Footer = () => {
                   <h4 className="text-lg font-semibold mb-4 text-yellow-400">Follow Us</h4>
                   <div className="flex gap-3">
                     {[
-                      { icon: Facebook, href: '#', label: 'Facebook' },
-                      { icon: Instagram, href: '#', label: 'Instagram' },
-                      { icon: Linkedin, href: '#', label: 'LinkedIn' },
-                      { icon: Twitter, href: '#', label: 'Twitter' }
+                      { icon: Facebook, href: 'https://www.facebook.com/sharer.php?u=https://www.lecrowninteriors.com/', label: 'Facebook' },
+                      { icon: Instagram, href: 'https://www.instagram.com/lecrowninteriors/', label: 'Instagram' },
+                      { icon: Linkedin, href: 'https://www.linkedin.com/cws/share?url=https://www.lecrowninteriors.com/', label: 'LinkedIn' },
+                      { icon: Twitter, href: 'https://x.com/share?url=https://www.lecrowninteriors.com/&text=LE%20Crown%20Interiors', label: 'Twitter' }
                     ].map((social, index) => (
                       <motion.a
                         key={index}

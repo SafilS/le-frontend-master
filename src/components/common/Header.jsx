@@ -50,8 +50,8 @@ const Header = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      // Breakpoint at exactly 1540px for desktop/mobile view
-      const shouldShow = window.innerWidth >= 1540;
+      // Improved breakpoint at 1024px for desktop/mobile view
+      const shouldShow = window.innerWidth >= 1024;
       setShowDesktopNav(shouldShow);
     };
 
@@ -78,8 +78,8 @@ const Header = () => {
 
   return (
     <>
-      <header className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-xl py-2 md:py-3' : 'bg-white/98 backdrop-blur-xl py-3 md:py-4 lg:py-6'}`}>
-        <div className="container mx-auto px-2 sm:px-4 lg:px-6">
+      <header className="fixed w-full z-50 bg-white backdrop-blur-xl shadow-md py-3 md:py-4 lg:py-6 transition-all duration-300">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between w-full">
             {/* Responsive Luxury Logo */}
             <div className="flex-shrink-0 max-w-[65%] lg:max-w-none">
@@ -144,12 +144,12 @@ const Header = () => {
 
             {/* Desktop Navigation */}
             {showDesktopNav && (
-              <nav className="flex space-x-2 xl:space-x-4 flex-1 justify-center mx-2">
+              <nav className="flex space-x-1 lg:space-x-2 xl:space-x-4 flex-1 justify-center mx-2">
                 {navLinks.map((link, index) => (
                   <PrefetchLink 
                     key={link.name}
                     to={link.path}
-                    className={`relative text-xs xl:text-sm font-semibold whitespace-nowrap transition-all duration-300 group px-1 xl:px-2 py-1 rounded-md ${
+                    className={`relative text-xs lg:text-sm xl:text-sm font-semibold whitespace-nowrap transition-all duration-300 group px-1 lg:px-2 xl:px-2 py-1 rounded-md ${
                       link.name === 'Crown Luxe' 
                         ? 'text-transparent bg-gradient-to-r from-yellow-600 to-yellow-400 bg-clip-text hover:from-yellow-500 hover:to-yellow-300' 
                         : 'text-gray-700 hover:text-yellow-600 hover:bg-yellow-50'
@@ -157,7 +157,7 @@ const Header = () => {
                   >
                     <div className="flex items-center">
                       {link.name === 'Crown Luxe' && <span className="mr-1 text-xs">👑</span>}
-                      <span className="truncate max-w-[80px] xl:max-w-none">{link.name}</span>
+                      <span className="truncate max-w-[70px] lg:max-w-[90px] xl:max-w-none">{link.name}</span>
                     </div>
                     {/* Luxury underline effect */}
                     <div className={`absolute -bottom-0 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${
@@ -228,7 +228,7 @@ const Header = () => {
                 ))}
                 <div className="border-t border-yellow-200 pt-4 mt-4">
                   <PrefetchLink 
-                    to="/get-estimate"
+                    to="/estimate/entire-home"
                     className="block w-full text-center bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-white py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center font-semibold shadow-lg text-sm"
                   >
                     <Phone size={16} className="mr-2" />
