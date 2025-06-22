@@ -21,13 +21,31 @@ import {
 const Footer = () => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleNewsletterSubmit = (e) => {
+  const handleNewsletterSubmit = async (e) => {
     e.preventDefault();
-    if (email) {
-      setIsSubscribed(true);
-      setEmail('');
-      setTimeout(() => setIsSubscribed(false), 3000);
+    setError(""); // clear previous errors
+
+    try {
+      const response = await fetch("https://le-crown-interiors-backend.onrender.com/subscribe/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsSubscribed(true);
+        setEmail(""); // Clear input
+      } else {
+        setError(data.error || "Subscription failed. Please try again.");
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again later.");
     }
   };
 
@@ -148,11 +166,18 @@ const Footer = () => {
                     />
                     <button
                       type="submit"
-                      className="px-6 py-2 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 rounded-lg transition-all duration-300 font-semibold whitespace-nowrap"
+                      disabled={isSubscribed}
+                      className={`px-6 py-2 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 rounded-lg transition-all duration-300 font-semibold whitespace-nowrap ${
+                        isSubscribed ? "cursor-not-allowed opacity-70" : ""
+                      }`}
                     >
-                      {isSubscribed ? '✓ Subscribed!' : 'Subscribe'}
+                      {isSubscribed ? "✓ Subscribed!" : "Subscribe"}
                     </button>
                   </form>
+
+                  {/* Success/Error Message */}
+                  {error && <p className="text-red-400 mt-2">{error}</p>}
+                  {isSubscribed && !error && <p className="text-green-400 mt-2">Subscribed successfully. Confirmation email sent!</p>}
                 </div>
               </motion.div>
             </div>

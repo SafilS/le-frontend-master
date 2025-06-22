@@ -124,7 +124,7 @@ const Hero = () => {
     
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % Math.max(desktopImages.length, 4));
-    }, 20000);
+    }, 8000);
 
     return () => clearInterval(interval);
   }, [isLoaded, desktopImages.length, isFirstLoad]);
@@ -179,22 +179,24 @@ const Hero = () => {
     <section className="relative w-full min-h-screen flex items-center overflow-hidden">
       {/* Background with improved transitions */}
       <div className="absolute inset-0 z-0">
-        {/* Fallback background to prevent blank screen */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
-        
-        <AnimatePresence mode="wait">
+        {/* Remove or make this gradient less opaque if you don’t want black */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black opacity-0"></div>
+
+        {/* AnimatePresence without wait mode */}
+        <AnimatePresence initial={false}>
           {heroImages}
         </AnimatePresence>
-        
-        {/* Enhanced mobile-optimized gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30 sm:from-black/70 sm:via-black/40 sm:to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40 sm:from-black/50 sm:to-black/30"></div>
+
+        {/* Optional gradients (adjust opacity or remove entirely) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/0 via-black/0 to-black/0 sm:to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-transparent to-black/0 sm:to-black/0"></div>
       </div>
 
-      {/* Floating Particles - Hidden on small mobile for performance */}
+      {/* Particles */}
       <div className="absolute inset-0 z-5 hidden sm:block">
         {particles}
       </div>
+
 
       {/* Main Content - Improved mobile layout */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-20 sm:pt-24">
@@ -273,7 +275,7 @@ const Hero = () => {
             {/* Trust Indicators - Responsive grid */}
             <motion.div 
               variants={itemVariants}
-              className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 w-full max-w-2xl sm:max-w-none"
+              className="pl-10 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 w-full max-w-2xl sm:max-w-none"
             >
               {useMemo(() => [
                 { icon: Users, number: '6000+', label: 'Happy Families', color: 'from-blue-500 to-blue-600' },

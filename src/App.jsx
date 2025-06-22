@@ -22,7 +22,8 @@ import EstimationTest from './components/estimation/EstimationTest';
 import DesignGalleryPage from './pages/DesignGalleryPage';
 import { DesignProvider } from './context/DesignContext';
 import { HeroImageProvider } from './context/HeroImageContext';
-import { Chatbot } from './components/chatbot/ChatBot';
+import Contact from './components/contact/Contact';
+// import { Chatbot } from './components/chatbot/ChatBot';
 // Route configuration with metadata for preloading
 const routes = [
   { path: '/', component: HomePage, preload: true },
@@ -36,7 +37,8 @@ const routes = [
   { path: '/bedroom', component: BedRoom, preload: true },
   { path: '/bathroom', component: BathRoom, preload: true },
   { path: '/living-room', component: LivingRoom, preload: true },
-  { path: '/office', component: HomeOffice, preload: true }
+  { path: '/office', component: HomeOffice, preload: true },
+  { path: '/contact-us', component: Contact, preload: true }
 ];
 
 // Component to handle route transitions and preloading
@@ -115,7 +117,7 @@ function App() {
               ))}
             </Routes>
             <Footer />
-            <Chatbot />
+            {/* <Chatbot />  */}
           </RouteHandler>
         </BrowserRouter>
       </DesignProvider>
