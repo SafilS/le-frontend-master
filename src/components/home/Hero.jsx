@@ -370,7 +370,7 @@ const Hero = () => {
       </AnimatePresence>
 
       {/* Floating Action Buttons - Mobile optimized */}
-      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-2 sm:gap-3">
+      <div className="fixed bottom-2 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-2 sm:gap-3">
         <motion.a
           href="https://wa.me/+918883958877?text=Hey%20I%20am%20from%20your%20Website" 
           className="bg-green-500 hover:bg-green-600 text-white p-3 sm:p-4 rounded-full shadow-2xl flex items-center transition-all duration-300 group"
