@@ -22,7 +22,7 @@ const Footer = () => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [error, setError] = useState("");
-  
+
    const handleNewsletterSubmit = async (e) => {
     e.preventDefault();
     setError(""); // clear previous errors
@@ -57,7 +57,7 @@ const Footer = () => {
     { name: 'Crown Luxe', path: '/luxe', icon: '👑' },
     { name: 'Crown Deco', path: '/deco' },
     { name: 'Design Gallery', path: '/gallery' },
-    { name: 'Get Estimate', path: '/get-estimate', highlight: true }
+    { name: 'Get Estimate', path: '/estimate/entire-home', highlight: true }
   ];
 
   const services = [
@@ -124,7 +124,7 @@ const Footer = () => {
                 {/* Logo */}
                 <div className="flex items-center mb-6">
                   <img 
-                    src=".../public/assets/icons/logo.png" 
+                    src="/assets/icons/logo.png" 
                     alt="LE-CROWN Interiors" 
                     className="h-12 mr-3"
                   />
@@ -332,10 +332,10 @@ const Footer = () => {
               </div>
               
               <div className="flex items-center gap-6">
-                <Link to="/privacy" className="text-gray-400 hover:text-yellow-400 text-sm transition-colors duration-300">
+                <Link className="text-gray-400 hover:text-yellow-400 text-sm transition-colors duration-300">
                   Privacy Policy
                 </Link>
-                <Link to="/terms" className="text-gray-400 hover:text-yellow-400 text-sm transition-colors duration-300">
+                <Link className="text-gray-400 hover:text-yellow-400 text-sm transition-colors duration-300">
                   Terms of Service
                 </Link>
                 
