@@ -30,6 +30,9 @@ const Header = () => {
   const [showDesktopNav, setShowDesktopNav] = useState(false);
   const [screenSize, setScreenSize] = useState('large');
   const location = useLocation();
+  
+  // Check if current page is Crown Luxe
+  const isCrownLuxePage = location.pathname === '/luxe';
 
   // Handle scroll effect for header
   useEffect(() => {
@@ -152,7 +155,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="fixed w-full z-50 bg-white backdrop-blur-xl shadow-md py-3 md:py-4 lg:py-6 transition-all duration-300">
+      <header className={`fixed w-full z-50 ${isCrownLuxePage ? (isScrolled ? 'bg-transparent/70 backdrop-blur-md shadow-md' : 'bg-transparent') : (isScrolled ? 'bg-white/90 shadow-md' : 'bg-white')} py-3 md:py-4 lg:py-6 transition-all duration-500`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between w-full min-h-[40px]">
             {/* Responsive Luxury Logo */}
@@ -169,7 +172,7 @@ const Header = () => {
                   <div className="flex items-center md:hidden">
                     <div className="flex flex-col relative">
                       <div className="relative">
-                        <span className="text-lg font-black tracking-wide bg-gradient-to-r from-yellow-600 to-yellow-400 bg-clip-text text-transparent">
+                        <span className={`text-lg font-black tracking-wide ${isCrownLuxePage ? 'text-white drop-shadow-md' : (isScrolled ? 'bg-gradient-to-r from-yellow-600 to-yellow-400 bg-clip-text text-transparent' : 'bg-gradient-to-r from-yellow-600 to-yellow-400 bg-clip-text text-transparent')}`}>
                           LE-CROWN
                         </span>
                         {/* Custom crown on L */}
@@ -181,7 +184,7 @@ const Header = () => {
                           </div>
                         </div>
                       </div>
-                      <span className="text-xs font-light tracking-[0.15em] bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent -mt-1">
+                      <span className={`text-xs font-light tracking-[0.15em] ${isCrownLuxePage ? 'text-white/90 drop-shadow-md' : (isScrolled ? 'bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent' : 'bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent')} -mt-1`}>
                         INTERIORS
                       </span>
                     </div>
@@ -190,7 +193,7 @@ const Header = () => {
                   {/* Desktop Logo - Responsive sizing */}
                   <div className="hidden md:flex items-center">
                     <div className="relative">
-                      <span className={`font-black tracking-wider bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600 bg-clip-text text-transparent drop-shadow-lg ${
+                      <span className={`font-black tracking-wider ${isCrownLuxePage ? 'text-white drop-shadow-lg' : (isScrolled ? 'bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600 bg-clip-text text-transparent' : 'bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600 bg-clip-text text-transparent')} ${
                         screenSize === 'xlarge' ? 'text-3xl' : 
                         screenSize === 'large' ? 'text-2xl' : 
                         'text-xl'
@@ -225,7 +228,7 @@ const Header = () => {
                       </div>
                     </div>
                     <div className={`flex flex-col ${screenSize === 'xlarge' ? 'ml-2' : 'ml-1'}`}>
-                      <span className={`font-light tracking-[0.2em] bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700 bg-clip-text text-transparent ${
+                      <span className={`font-light tracking-[0.2em] ${isCrownLuxePage ? 'text-white/90 drop-shadow-md' : (isScrolled ? 'bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700 bg-clip-text text-transparent' : 'bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700 bg-clip-text text-transparent')} ${
                         screenSize === 'xlarge' ? 'text-base' :
                         screenSize === 'large' ? 'text-sm' :
                         'text-xs'
@@ -252,8 +255,12 @@ const Header = () => {
                       to={link.path}
                       className={`relative ${getNavTextSize()} font-semibold whitespace-nowrap transition-all duration-300 group ${getNavPadding()} rounded-md flex-shrink-0 ${
                         link.name === 'Crown Luxe' 
-                          ? 'text-transparent bg-gradient-to-r from-yellow-600 to-yellow-400 bg-clip-text hover:from-yellow-500 hover:to-yellow-300' 
-                          : 'text-gray-700 hover:text-yellow-600 hover:bg-yellow-50'
+                          ? isCrownLuxePage 
+                            ? 'text-yellow-300 hover:text-yellow-200 drop-shadow-md' 
+                            : 'text-transparent bg-gradient-to-r from-yellow-600 to-yellow-400 bg-clip-text hover:from-yellow-500 hover:to-yellow-300'
+                          : isCrownLuxePage 
+                            ? 'text-white hover:text-yellow-200 drop-shadow-md' 
+                            : (isScrolled ? 'text-gray-700 hover:text-yellow-600 hover:bg-yellow-50/80' : 'text-gray-700 hover:text-yellow-600 hover:bg-yellow-50/80')
                       }`}
                     >
                       <div className="flex items-center">
@@ -272,7 +279,7 @@ const Header = () => {
                   {/* More menu for hidden items on medium screens */}
                   {screenSize === 'medium' && navLinks.length > 6 && (
                     <div className="relative group">
-                      <button className="text-xs font-semibold text-gray-700 hover:text-yellow-600 px-1.5 py-1 rounded-md hover:bg-yellow-50 transition-all duration-300">
+                      <button className={`text-xs font-semibold ${isCrownLuxePage ? 'text-white hover:text-yellow-200 drop-shadow-md' : (isScrolled ? 'text-gray-700 hover:text-yellow-600 hover:bg-yellow-50/80' : 'text-gray-700 hover:text-yellow-600 hover:bg-yellow-50/80')} px-1.5 py-1 rounded-md transition-all duration-300`}>
                         More
                       </button>
                       <div className="absolute top-full right-0 mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
@@ -299,7 +306,7 @@ const Header = () => {
               <div className="flex items-center flex-shrink-0 ml-2">
                 <PrefetchLink 
                   to="/estimate/entire-home" 
-                  className={`bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-white py-2 rounded-lg transition-all duration-300 font-bold flex items-center shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap ${
+                  className={`${isCrownLuxePage ? 'bg-yellow-500/80 hover:bg-yellow-400/90 backdrop-blur-sm' : (isScrolled ? 'bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400' : 'bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400')} text-white py-2 rounded-lg transition-all duration-300 font-bold flex items-center shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap ${
                     screenSize === 'xlarge' ? 'px-4 text-sm' :
                     screenSize === 'large' ? 'px-3 text-sm' :
                     'px-2 text-xs'
@@ -317,7 +324,7 @@ const Header = () => {
               <div className="flex items-center flex-shrink-0">
                 <button
                   onClick={toggleMenu}
-                  className="text-gray-700 hover:text-yellow-600 focus:outline-none p-1.5 rounded-lg hover:bg-yellow-50 transition-all duration-300"
+                  className={`${isCrownLuxePage ? 'text-white hover:text-yellow-200' : (isScrolled ? 'text-gray-700 hover:text-yellow-600 hover:bg-yellow-50/80' : 'text-gray-700 hover:text-yellow-600 hover:bg-yellow-50/80')} focus:outline-none p-1.5 rounded-lg transition-all duration-300`}
                   aria-label="Toggle menu"
                 >
                   {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
