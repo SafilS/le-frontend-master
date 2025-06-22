@@ -82,7 +82,7 @@ const crownLuxeDesigns = [
     id: 6,
     title: 'Ruby Entertainment Lounge',
     description: 'An exclusive entertainment space with ruby accents, premium leather, and state-of-the-art audio-visual systems.',
-    imageUrl: '/assets/images/office/ruby.png',
+    imageUrl: '/assets/images/kitchen/modern.png',
     category: 'entertainment',
     style: 'Ruby Lounge',
     features: ['Ruby Accent Lighting', 'Premium Leather', '8K Theater System', 'Whiskey Bar', 'Cigar Humidor', 'Gaming Zone'],

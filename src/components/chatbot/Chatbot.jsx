@@ -128,7 +128,7 @@ export default function Chatbot() {
     <div>
       {/* Chat Button with Small Indicator */}
       {!chatOpen && (
-        <div className="fixed bottom-20 right-6 z-50">
+        <div className="fixed bottom-5 right-6 z-50">
           {/* Small Animated Indicator */}
 
           {/* Pulsing Ring Effect */}
