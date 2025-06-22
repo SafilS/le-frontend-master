@@ -130,7 +130,6 @@ export default function Chatbot() {
       {!chatOpen && (
         <div className="fixed bottom-6 right-6 z-50">
           {/* Small Animated Indicator */}
-          
 
           {/* Pulsing Ring Effect */}
           <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full animate-ping opacity-20"></div>
@@ -195,7 +194,40 @@ export default function Chatbot() {
               </button>
             </div>
           </div>
+          {chat.length == 0 && !isLoading && (
+            <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-amber-50/30 to-white">
+              <div className="text-center space-y-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center mx-auto animate-pulse">
+                  <Bot className="w-6 h-6 text-white" />
+                </div>
 
+                <div className="space-y-2">
+                  <div className="text-lg font-semibold text-gray-800">
+                    I am waiting to assist you
+                  </div>
+                  <div className="text-sm text-gray-600 flex items-center justify-center gap-1">
+                    Let's start the first conversation!
+                    <span
+                      role="img"
+                      aria-label="waving hand"
+                      className="animate-wave origin-[70%_70%] inline-block">
+                      👋
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex justify-center gap-1">
+                  <div className="w-2 h-2 bg-amber-400 rounded-full animate-bounce"></div>
+                  <div
+                    className="w-2 h-2 bg-amber-500 rounded-full animate-bounce"
+                    style={{ animationDelay: '0.1s' }}></div>
+                  <div
+                    className="w-2 h-2 bg-amber-600 rounded-full animate-bounce"
+                    style={{ animationDelay: '0.2s' }}></div>
+                </div>
+              </div>
+            </div>
+          )}
           {/* Loading State */}
           {isLoading && (
             <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-amber-50/30 to-white">
