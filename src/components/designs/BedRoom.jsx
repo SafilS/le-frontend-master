@@ -203,10 +203,10 @@ const BedRoom = () => {
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
-            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black bg-gradient-to-r from-blue-600 via-indigo-500 to-slate-500 bg-clip-text text-transparent tracking-wider relative">
+            <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black bg-gradient-to-r from-blue-600 via-indigo-500 to-slate-500 bg-clip-text text-transparent tracking-wider relative">
               BED
             </span>
-            <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-gray-800 tracking-widest mt-2 relative">
+            <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light text-gray-800 tracking-widest mt-2 relative">
               ROOMS
             </span>
             {/* Decorative elements */}

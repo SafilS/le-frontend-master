@@ -23,10 +23,10 @@ const Contact = () => {
             className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-yellow-400 placeholder-gray-400 text-white"
             />
             <input
-            type="email"
-            name="email"
+            type="mobile"
+            name="mobile"
             required
-            placeholder="Your Email"
+            placeholder="Mobile number"
             className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-yellow-400 placeholder-gray-400 text-white"
             />
         </div>

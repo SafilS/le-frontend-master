@@ -224,7 +224,7 @@ const Hero = () => {
             {/* Main Headline - Optimized for mobile */}
             <motion.div variants={itemVariants} className="mb-4 sm:mb-6 w-full">
               <div className="bg-black/50 backdrop-blur-sm rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 border border-white/10">
-                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight">
                   <span className="block text-white drop-shadow-2xl mb-1 sm:mb-2">
                     Transform Your
                   </span>
@@ -237,7 +237,7 @@ const Hero = () => {
                 </h1>
                 
                 {/* Subtitle - Smaller on mobile */}
-                <p className="text-sm sm:text-lg md:text-xl text-gray-100 leading-relaxed mt-3 sm:mt-6 max-w-2xl mx-auto px-2 sm:px-0">
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-100 leading-relaxed mt-3 sm:mt-6 max-w-2xl mx-auto px-2 sm:px-0">
                   Where <span className="text-yellow-400 font-semibold">elegance meets functionality</span>.
                 </p>
               </div>
@@ -370,9 +370,9 @@ const Hero = () => {
       </AnimatePresence>
 
       {/* Floating Action Buttons - Mobile optimized */}
-      <div className="fixed bottom-2 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-2 sm:gap-3">
+      {/* <div className="fixed bottom-2 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col gap-2 sm:gap-3">
         <motion.a
-          href="https://wa.me/+918883958877?text=Hey%20I%20am%20from%20your%20Website" 
+          href="https://wa.me/+918883958877?text=Hii%20Mansoor%20I%20am%20from%20your%20Website%20" 
           className="bg-green-500 hover:bg-green-600 text-white p-3 sm:p-4 rounded-full shadow-2xl flex items-center transition-all duration-300 group"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -381,7 +381,7 @@ const Hero = () => {
           <MessageCircle size={20} className="sm:w-6 sm:h-6 group-hover:scale-110 transition-transform" />
           <span className="ml-2 hidden lg:inline font-medium">Chat with us</span>
         </motion.a>
-      </div>
+      </div> */}
 
       {/* Scroll Indicator - Hidden on mobile */}
       <motion.div 

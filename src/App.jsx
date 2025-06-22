@@ -40,7 +40,7 @@ const routes = [
   { path: '/bathroom', component: BathRoom, preload: true },
   { path: '/living-room', component: LivingRoom, preload: true },
   { path: '/office', component: HomeOffice, preload: true },
-  { path: '/contact-us', component: Contact, preload: true }
+  { path: '/contact', component: Contact, preload: true }
 
 ];
 

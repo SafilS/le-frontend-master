@@ -179,7 +179,7 @@ const Contact = () => {
               variants={fadeInVariants}
             >
               <a 
-                href="https://wa.me/919876543210" 
+                href="https://wa.me/+918883958877?text=Hii%20Mansoor%20I%20am%20from%20your%20Website%20"  
                 className="flex-1 bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-xl font-semibold flex items-center justify-center transition-all duration-300 hover:scale-105 shadow-lg"
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
@@ -258,14 +258,14 @@ const Contact = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a 
-              href="tel:+919876543210"
+              href="tel:+918883958877"
               className="bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-white py-3 px-8 rounded-xl font-semibold flex items-center justify-center transition-all duration-300 hover:scale-105 shadow-lg"
             >
               <Phone className="w-5 h-5 mr-2" />
               Call Now for Free Consultation
             </a>
             <a 
-              href="mailto:info@lecrowninteriors.com"
+              href="mailto:mohammedsafil039@gmail.com"
               className="bg-transparent border-2 border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-white py-3 px-8 rounded-xl font-semibold flex items-center justify-center transition-all duration-300"
             >
               <Mail className="w-5 h-5 mr-2" />

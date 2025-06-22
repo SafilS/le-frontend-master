@@ -90,7 +90,7 @@ const DesignToolIntro = () => {
             <Wand2 className="w-8 h-8 text-white" />
           </div>
           
-          <h2 className="text-4xl lg:text-5xl font-light mb-4 text-gray-800">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-light mb-4 text-gray-800">
             Design Your Dream Space
             <span className="block text-transparent bg-gradient-to-r from-yellow-600 to-yellow-400 bg-clip-text font-semibold">
               With Our Custom Design Tool
@@ -270,7 +270,7 @@ const DesignToolIntro = () => {
                   href="/estimate/entire-home"
                   className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-yellow-600 transition-all duration-300"
                 >
-                  Get Free Consultation
+                  Get Free Estimation
                 </a>
               </div>
             </div>

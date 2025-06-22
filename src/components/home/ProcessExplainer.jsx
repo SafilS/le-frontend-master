@@ -244,7 +244,7 @@ const ProcessExplainer = ({ steps }) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <span>Start Your Project</span>
+            <span><a href="/contact" >Start Your Project</a></span>
             <ArrowRight className="w-4 h-4 ml-2" />
           </motion.button>
         </div>

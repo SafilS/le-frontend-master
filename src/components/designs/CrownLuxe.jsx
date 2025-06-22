@@ -7,7 +7,7 @@ const crownLuxeDesigns = [
     id: 1,
     title: 'Royal Palace Suite',
     description: 'Experience the grandeur of royalty with hand-crafted Italian marble, gold leaf accents, and bespoke furniture fit for a king.',
-    imageUrl: '/assets/images/livespace4.png',
+    imageUrl: '/assets/images/living/lux.png',
     category: 'royal',
     style: 'Palace',
     features: ['Italian Carrara Marble', 'Gold Leaf Detailing', 'Crystal Chandeliers', 'Silk Upholstery', 'Hand-carved Furniture', 'Smart Home Integration'],
@@ -22,7 +22,7 @@ const crownLuxeDesigns = [
     id: 2,
     title: 'Diamond Executive Office',
     description: 'A CEO\'s sanctuary featuring rare woods, platinum accents, and cutting-edge technology for the ultimate power workspace.',
-    imageUrl: '/assets/images/lap1.jpg',
+    imageUrl: '/assets/images/office/diamond.png',
     category: 'executive',
     style: 'Diamond Class',
     features: ['Rare Ebony Wood', 'Platinum Hardware', 'Leather from Hermès', 'Smart Glass Walls', 'Climate Control', 'Private Bar'],
@@ -37,7 +37,7 @@ const crownLuxeDesigns = [
     id: 3,
     title: 'Sapphire Living Sanctuary',
     description: 'An opulent living space adorned with precious stones, custom artwork, and the finest materials from around the world.',
-    imageUrl: '/assets/images/livespace5.png',
+    imageUrl: '/assets/images/living/sanctuary.png',
     category: 'living',
     style: 'Sapphire Collection',
     features: ['Sapphire Inlays', 'Custom Oil Paintings', 'Venetian Plaster', 'Cashmere Fabrics', 'Heated Floors', 'Wine Cellar'],
@@ -52,7 +52,7 @@ const crownLuxeDesigns = [
     id: 4,
     title: 'Emerald Spa Retreat',
     description: 'Transform your bathroom into a luxury spa with emerald accents, onyx surfaces, and therapeutic amenities.',
-    imageUrl: '/assets/images/livespace6.jpg',
+    imageUrl: '/assets/images/living/spa.png',
     category: 'spa',
     style: 'Emerald Wellness',
     features: ['Onyx Surfaces', 'Emerald Accents', 'Steam Room', 'Chromotherapy', 'Heated Towel Rails', 'Sound System'],
@@ -67,7 +67,7 @@ const crownLuxeDesigns = [
     id: 5,
     title: 'Platinum Culinary Theater',
     description: 'A chef\'s dream kitchen with professional-grade appliances, marble countertops, and platinum fixtures.',
-    imageUrl: '/assets/images/lap2.png',
+    imageUrl: '/assets/images/office/theator.png',
     category: 'culinary',
     style: 'Platinum Chef',
     features: ['Professional Appliances', 'Calacatta Marble', 'Platinum Fixtures', 'Wine Storage', 'Chef\'s Island', 'Teppanyaki Grill'],
@@ -82,7 +82,7 @@ const crownLuxeDesigns = [
     id: 6,
     title: 'Ruby Entertainment Lounge',
     description: 'An exclusive entertainment space with ruby accents, premium leather, and state-of-the-art audio-visual systems.',
-    imageUrl: '/assets/images/lap3.png',
+    imageUrl: '/assets/images/office/ruby.png',
     category: 'entertainment',
     style: 'Ruby Lounge',
     features: ['Ruby Accent Lighting', 'Premium Leather', '8K Theater System', 'Whiskey Bar', 'Cigar Humidor', 'Gaming Zone'],
@@ -112,7 +112,7 @@ const crownLuxeDesigns = [
     id: 8,
     title: 'Golden Walk-in Wardrobe',
     description: 'A fashion lover\'s paradise with gold accents, velvet interiors, and custom storage for the most discerning tastes.',
-    imageUrl: '/assets/images/lap4.jpg',
+    imageUrl: '/assets/images/furniture/ward.png',
     category: 'wardrobe',
     style: 'Golden Couture',
     features: ['Gold Leaf Accents', 'Velvet Interiors', 'LED Lighting', 'Jewelry Display', 'Shoe Gallery', 'Dressing Island'],
@@ -209,10 +209,10 @@ const CrownLuxe = () => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
           >
-            <span className="block text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black bg-gradient-to-r from-yellow-400 via-yellow-200 to-yellow-600 bg-clip-text text-transparent tracking-wider relative">
+            <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black bg-gradient-to-r from-yellow-400 via-yellow-200 to-yellow-600 bg-clip-text text-transparent tracking-wider relative">
               CROWN
             </span>
-            <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light bg-gradient-to-r from-purple-300 via-pink-200 to-purple-400 bg-clip-text text-transparent tracking-[0.3em] mt-2 relative">
+            <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light bg-gradient-to-r from-purple-300 via-pink-200 to-purple-400 bg-clip-text text-transparent tracking-[0.3em] mt-2 relative">
               LUXE
             </span>
             

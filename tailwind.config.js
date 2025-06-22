@@ -29,7 +29,10 @@ export default {
                 '0%, 100%': { transform: 'translateY(0)', opacity: '0.8' },
                 '50%': { transform: 'translateY(10px)', opacity: '1' },
             }
-        }
+        },
+        screens: {
+        '3xl': '1920px',
+        },
     }
   },
   plugins: [],

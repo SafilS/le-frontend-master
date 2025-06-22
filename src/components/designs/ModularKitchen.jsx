@@ -6,7 +6,7 @@ const kitchenDesigns = [
     id: 1,
     title: 'Modern L-Shaped Kitchen',
     description: 'Contemporary design with sleek finishes and optimal space utilization.',
-    imageUrl: '/assets/images/livespace4.png',
+    imageUrl: '/assets/images/kitchen/Lshape.png',
     category: 'modern',
     style: 'L-Shaped',
     features: ['Modular Cabinets', 'Granite Countertop', 'Built-in Appliances', 'Soft-close Drawers'],
@@ -19,7 +19,7 @@ const kitchenDesigns = [
     id: 2,
     title: 'Classic U-Shaped Kitchen',
     description: 'Traditional design with ample storage and workspace.',
-    imageUrl: '/assets/images/livespace5.png',
+    imageUrl: '/assets/images/kitchen/Ushape.png',
     category: 'classic',
     style: 'U-Shaped',
     features: ['Wooden Cabinets', 'Marble Countertop', 'Island Counter', 'Wine Storage'],
@@ -32,7 +32,7 @@ const kitchenDesigns = [
     id: 3,
     title: 'Minimalist Straight Kitchen',
     description: 'Clean lines and minimalist approach for compact spaces.',
-    imageUrl: '/assets/images/livespace6.jpg',
+    imageUrl: '/assets/images/kitchen/mini.png',
     category: 'minimalist',
     style: 'Straight',
     features: ['Handle-less Design', 'Quartz Countertop', 'Soft-close Drawers', 'LED Lighting'],
@@ -45,7 +45,7 @@ const kitchenDesigns = [
     id: 4,
     title: 'Luxury Island Kitchen',
     description: 'Premium design with central island and high-end finishes.',
-    imageUrl: '/assets/images/lap1.jpg',
+    imageUrl: '/assets/images/kitchen/luxisland.png',
     category: 'luxury',
     style: 'Island',
     features: ['Central Island', 'Premium Hardware', 'Wine Storage', 'Smart Appliances'],
@@ -58,7 +58,7 @@ const kitchenDesigns = [
     id: 5,
     title: 'Contemporary Parallel Kitchen',
     description: 'Efficient galley-style layout perfect for narrow spaces.',
-    imageUrl: '/assets/images/lap2.png',
+    imageUrl: '/assets/images/kitchen/parallel.png',
     category: 'contemporary',
     style: 'Parallel',
     features: ['Space Optimization', 'LED Lighting', 'Pull-out Organizers', 'Breakfast Counter'],
@@ -71,7 +71,7 @@ const kitchenDesigns = [
     id: 6,
     title: 'Rustic Farmhouse Kitchen',
     description: 'Warm and inviting design with natural materials.',
-    imageUrl: '/assets/images/lap3.png',
+    imageUrl: '/assets/images/kitchen/formhouse.png',
     category: 'rustic',
     style: 'L-Shaped',
     features: ['Wooden Beams', 'Farmhouse Sink', 'Open Shelving', 'Vintage Hardware'],
@@ -84,7 +84,7 @@ const kitchenDesigns = [
     id: 7,
     title: 'Smart Modular Kitchen',
     description: 'Technology-integrated kitchen with smart appliances.',
-    imageUrl: '/assets/images/lap4.jpg',
+    imageUrl: '/assets/images/kitchen/modern.png',
     category: 'smart',
     style: 'U-Shaped',
     features: ['Smart Appliances', 'Touch Controls', 'Automated Storage', 'Voice Control'],
@@ -97,7 +97,7 @@ const kitchenDesigns = [
     id: 8,
     title: 'Compact Studio Kitchen',
     description: 'Space-saving design perfect for studio apartments.',
-    imageUrl: '/assets/images/mobile1.jpg',
+    imageUrl: '/assets/images/kitchen/studio.png',
     category: 'compact',
     style: 'Straight',
     features: ['Foldable Counter', 'Compact Appliances', 'Vertical Storage', 'Multi-functional'],
@@ -110,7 +110,7 @@ const kitchenDesigns = [
     id: 9,
     title: 'Industrial Style Kitchen',
     description: 'Bold industrial design with exposed elements and metal accents.',
-    imageUrl: '/assets/images/livespace4.png',
+    imageUrl: '/assets/images/kitchen/industry.png',
     category: 'industrial',
     style: 'L-Shaped',
     features: ['Metal Accents', 'Exposed Brick', 'Industrial Lighting', 'Concrete Countertop'],
@@ -123,7 +123,7 @@ const kitchenDesigns = [
     id: 10,
     title: 'Modular Peninsula Kitchen',
     description: 'Versatile peninsula design offering additional workspace and storage.',
-    imageUrl: '/assets/images/livespace5.png',
+    imageUrl: '/assets/images/kitchen/peninsula.png',
     category: 'modular',
     style: 'Peninsula',
     features: ['Peninsula Counter', 'Modular Units', 'Breakfast Bar', 'Extra Storage'],
@@ -204,10 +204,10 @@ const ModularKitchen = () => {
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
-            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black bg-gradient-to-r from-orange-600 via-red-500 to-pink-500 bg-clip-text text-transparent tracking-wider relative">
+            <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black bg-gradient-to-r from-orange-600 via-red-500 to-pink-500 bg-clip-text text-transparent tracking-wider relative">
               MODULAR
             </span>
-            <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-gray-800 tracking-widest mt-2 relative">
+            <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light text-gray-800 tracking-widest mt-2 relative">
               KITCHENS
             </span>
             {/* Decorative elements */}
