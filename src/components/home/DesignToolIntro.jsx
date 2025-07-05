@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useAnimation } from '../../context/AnimationContext';
 import { 
   Palette, 
   Lightbulb, 
@@ -17,6 +18,7 @@ import {
 
 const DesignToolIntro = () => {
   const [hoveredFeature, setHoveredFeature] = useState(null);
+  const { disableScrollAnimations } = useAnimation();
 
   const designFeatures = [
     {
@@ -81,10 +83,11 @@ const DesignToolIntro = () => {
         {/* Header Section */}
         <motion.div 
           className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
+          initial={disableScrollAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
+          animate={disableScrollAnimations ? { opacity: 1, y: 0 } : undefined}
         >
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-yellow-600 to-yellow-500 rounded-full mb-6">
             <Wand2 className="w-8 h-8 text-white" />
@@ -131,10 +134,11 @@ const DesignToolIntro = () => {
         {/* Features Grid */}
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
-          initial={{ opacity: 0, y: 30 }}
+          initial={disableScrollAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
+          animate={disableScrollAnimations ? { opacity: 1, y: 0 } : undefined}
         >
           {designFeatures.map((feature, index) => {
             const IconComponent = feature.icon;
@@ -177,10 +181,11 @@ const DesignToolIntro = () => {
         {/* How It Works Section */}
         <motion.div
           className="bg-white rounded-3xl p-8 lg:p-12 shadow-xl border border-gray-100"
-          initial={{ opacity: 0, y: 30 }}
+          initial={disableScrollAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
+          animate={disableScrollAnimations ? { opacity: 1, y: 0 } : undefined}
         >
           <div className="text-center mb-12">
             <h3 className="text-3xl lg:text-4xl font-light text-gray-800 mb-4">
@@ -197,10 +202,11 @@ const DesignToolIntro = () => {
               <motion.div
                 key={index}
                 className="relative text-center group"
-                initial={{ opacity: 0, y: 20 }}
+                initial={disableScrollAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
+                animate={disableScrollAnimations ? { opacity: 1, y: 0 } : undefined}
               >
                 {/* Step number */}
                 <div className="relative inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-yellow-600 to-yellow-500 text-white font-bold text-xl rounded-full mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -225,10 +231,11 @@ const DesignToolIntro = () => {
         {/* Bottom CTA Section */}
         <motion.div
           className="text-center mt-16"
-          initial={{ opacity: 0, y: 30 }}
+          initial={disableScrollAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.6 }}
+          animate={disableScrollAnimations ? { opacity: 1, y: 0 } : undefined}
         >
           <div className="bg-gradient-to-r from-yellow-600 to-yellow-500 rounded-2xl p-8 lg:p-12 text-white relative overflow-hidden">
             {/* Background pattern */}

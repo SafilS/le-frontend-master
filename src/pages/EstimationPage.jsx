@@ -15,11 +15,14 @@ import {
   Download,
   Share2,
   Phone,
-  Mail
+  Mail,
+  Loader,
+  AlertCircle
 } from 'lucide-react';
 import RoomCanvas from '../components/estimation/RoomCanvas';
 import PricingCalculator from '../components/estimation/PricingCalculator';
 import MaterialSelector from '../components/estimation/MaterialSelector';
+import { submitEstimationOrder, transformEstimationData } from '../utils/api';
 
 const EstimationPage = () => {
   const { type } = useParams();
@@ -36,9 +39,12 @@ const EstimationPage = () => {
   });
   const [totalEstimate, setTotalEstimate] = useState(0);
   const [breakdown, setBreakdown] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const isEntireHome = type === 'entire-home';
-  const totalSteps = isEntireHome ? 6 : 5;
+  const totalSteps = 6; // Both flows now have 6 steps
 
   // Pricing data
   const pricingData = {
@@ -188,6 +194,67 @@ const EstimationPage = () => {
     }
   };
 
+  const validateForm = () => {
+    const errors = [];
+    
+    // Check dimensions
+    if (!estimationData.dimensions || Object.keys(estimationData.dimensions).length === 0) {
+      errors.push('Please add at least one room with dimensions');
+    } else {
+      const hasValidRoom = Object.values(estimationData.dimensions).some(room => 
+        room.length && room.width && room.height
+      );
+      if (!hasValidRoom) {
+        errors.push('Please enter valid dimensions for at least one room');
+      }
+    }
+    
+    // Check contact info (required for final step)
+    if (currentStep === totalSteps) {
+      if (!estimationData.contactInfo.name) errors.push('Name is required');
+      if (!estimationData.contactInfo.phone) errors.push('Phone number is required');
+      if (!estimationData.contactInfo.email) errors.push('Email is required');
+    }
+    
+    return errors;
+  };
+
+  const handleSubmitEstimation = async () => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+    
+    try {
+      // Validate form
+      const validationErrors = validateForm();
+      if (validationErrors.length > 0) {
+        setSubmitError(validationErrors.join(', '));
+        return;
+      }
+      
+      // Transform the estimation data to API format
+      const apiData = transformEstimationData(estimationData, totalEstimate);
+      
+      console.log('Submitting estimation data:', apiData);
+      
+      // Submit to API
+      const response = await submitEstimationOrder(apiData);
+      
+      console.log('Estimation submitted successfully:', response);
+      setSubmitSuccess(true);
+      
+      // Optional: Show success message or navigate to success page
+      setTimeout(() => {
+        navigate('/');
+      }, 3000);
+      
+    } catch (error) {
+      console.error('Failed to submit estimation:', error);
+      setSubmitError(error.message || 'Failed to submit estimation. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -199,7 +266,8 @@ const EstimationPage = () => {
       case 2:
         return <MaterialsStep 
           isEntireHome={isEntireHome} 
-          data={estimationData.materials} 
+          data={estimationData.materials}
+          dimensionsData={estimationData.dimensions}
           onChange={(field, value, subField) => handleInputChange('materials', field, value, subField)}
         />;
       case 3:
@@ -220,10 +288,10 @@ const EstimationPage = () => {
           onChange={(features) => setEstimationData(prev => ({ ...prev, additionalFeatures: features }))}
         />;
       case 6:
-        return isEntireHome ? <ContactStep 
+        return <ContactStep 
           data={estimationData.contactInfo} 
           onChange={(field, value) => handleInputChange('contactInfo', field, value)}
-        /> : null;
+        />;
       default:
         return null;
     }
@@ -313,13 +381,65 @@ const EstimationPage = () => {
                 )}
                 {currentStep === totalSteps && (
                   <button
-                    className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 ml-auto"
+                    onClick={handleSubmitEstimation}
+                    disabled={isSubmitting || submitSuccess}
+                    className={`flex items-center px-6 py-3 text-white rounded-lg ml-auto transition-colors ${
+                      submitSuccess 
+                        ? 'bg-green-600 hover:bg-green-700' 
+                        : isSubmitting 
+                        ? 'bg-gray-400 cursor-not-allowed' 
+                        : 'bg-green-600 hover:bg-green-700'
+                    }`}
                   >
-                    Get Final Quote
-                    <CheckCircle size={16} className="ml-2" />
+                    {isSubmitting ? (
+                      <>
+                        <Loader size={16} className="mr-2 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : submitSuccess ? (
+                      <>
+                        <CheckCircle size={16} className="mr-2" />
+                        Submitted Successfully!
+                      </>
+                    ) : (
+                      <>
+                        Get Final Quote
+                        <CheckCircle size={16} className="ml-2" />
+                      </>
+                    )}
                   </button>
                 )}
               </div>
+              
+              {/* Error Message */}
+              {submitError && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center"
+                >
+                  <AlertCircle size={20} className="text-red-500 mr-3" />
+                  <div>
+                    <h4 className="font-semibold text-red-800">Submission Failed</h4>
+                    <p className="text-sm text-red-600">{submitError}</p>
+                  </div>
+                </motion.div>
+              )}
+              
+              {/* Success Message */}
+              {submitSuccess && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center"
+                >
+                  <CheckCircle size={20} className="text-green-500 mr-3" />
+                  <div>
+                    <h4 className="font-semibold text-green-800">Estimation Submitted Successfully!</h4>
+                    <p className="text-sm text-green-600">We'll contact you soon with the detailed quote. Redirecting to home...</p>
+                  </div>
+                </motion.div>
+              )}
             </motion.div>
           </div>
 
@@ -342,7 +462,7 @@ const EstimationPage = () => {
 // Step Components
 const DimensionsStep = ({ isEntireHome, data, onChange }) => {
   const [customRooms, setCustomRooms] = useState(isEntireHome 
-    ? ['living_room', 'kitchen', 'master_bedroom', 'bedroom_2', 'bathroom_1', 'bathroom_2']
+    ? ['living_room', 'kitchen', 'master_bedroom']
     : ['kitchen']);
   
   const [newRoomType, setNewRoomType] = useState('');
@@ -383,6 +503,7 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
     // Don't allow removing the kitchen for kitchen estimation
     if (!isEntireHome && roomToRemove === 'kitchen') return;
     
+    // For entire home, allow removal of any room including the initial ones
     setCustomRooms(customRooms.filter(room => room !== roomToRemove));
   };
 
@@ -392,7 +513,12 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
         <Ruler className="mr-3 text-blue-600" />
         Room Dimensions
       </h2>
-      <p className="text-gray-600 mb-8">Enter the dimensions for each room in feet.</p>
+      <p className="text-gray-600 mb-8">
+        {isEntireHome 
+          ? "We've started with the main rooms: Living Room, Kitchen, and Master Bedroom. You can remove any room you don't need or add additional rooms below. Enter dimensions to see the room visualizer."
+          : "Enter the dimensions for your kitchen in feet."
+        }
+      </p>
       
       {/* Add Room Controls */}
       {isEntireHome && (
@@ -407,10 +533,13 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select a room type</option>
+                <option value="bedroom_2">Bedroom 2</option>
+                <option value="bedroom_3">Bedroom 3</option>
+                <option value="bathroom_1">Bathroom 1</option>
+                <option value="bathroom_2">Bathroom 2</option>
+                <option value="bathroom_3">Bathroom 3</option>
                 <option value="home_office">Home Office</option>
                 <option value="dining_room">Dining Room</option>
-                <option value="bedroom_3">Bedroom 3</option>
-                <option value="bathroom_3">Bathroom 3</option>
                 <option value="balcony">Balcony</option>
               </select>
             </div>
@@ -447,11 +576,12 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
           >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">{roomLabels[room] || room}</h3>
-              {isEntireHome && customRooms.length > 1 && (
+              {isEntireHome && (
                 <button 
                   onClick={() => removeRoom(room)}
-                  className="text-red-500 hover:text-red-700 text-sm"
+                  className="text-red-500 hover:text-red-700 text-sm flex items-center"
                 >
+                  <span className="mr-1">×</span>
                   Remove
                 </button>
               )}
@@ -494,14 +624,23 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
               </div>
             )}
             
-            {/* Room Canvas for all rooms */}
-            <div className="mt-6">
-              <RoomCanvas
-                dimensions={data[room] || {}}
-                roomType={room}
-                onDimensionChange={(field, value) => onChange(room, value, field)}
-              />
-            </div>
+            {/* Room Canvas - Only show when dimensions are entered */}
+            {data[room]?.length && data[room]?.width && data[room]?.height ? (
+              <div className="mt-6">
+                <RoomCanvas
+                  dimensions={data[room]}
+                  roomType={room}
+                  onDimensionChange={(field, value) => onChange(room, value, field)}
+                />
+              </div>
+            ) : (
+              <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg text-center">
+                <div className="text-gray-500">
+                  <Home size={24} className="mx-auto mb-2 text-gray-400" />
+                  <p className="text-sm">Enter all dimensions to see the room visualizer</p>
+                </div>
+              </div>
+            )}
           </motion.div>
         ))}
       </div>
@@ -509,7 +648,7 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
   );
 };
 
-const MaterialsStep = ({ isEntireHome, data, onChange }) => {
+const MaterialsStep = ({ isEntireHome, data, dimensionsData, onChange }) => {
   const quality = [
     { id: 'basic', name: 'Basic Quality', description: 'Standard workmanship' },
     { id: 'premium', name: 'Premium Quality', description: 'Enhanced finishing' },
@@ -518,7 +657,7 @@ const MaterialsStep = ({ isEntireHome, data, onChange }) => {
   
   // Get all rooms from dimensions data for entire home
   const rooms = isEntireHome 
-    ? Object.keys(data.dimensions || {})
+    ? Object.keys(dimensionsData || {})
     : ['kitchen'];
   
   const [selectedRoom, setSelectedRoom] = useState(rooms[0] || 'all');

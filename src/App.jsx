@@ -6,6 +6,7 @@ import {
   useLocation,
   useNavigationType,
 } from 'react-router-dom';
+import { AnimationProvider } from './context/AnimationContext';
 
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
@@ -25,6 +26,7 @@ import { DesignProvider } from './context/DesignContext';
 import { HeroImageProvider } from './context/HeroImageContext';
 import Contact from './components/contact/Contact';
 import Chatbot  from './components/chatbot/Chatbot';
+import ApiTestPage from './pages/ApiTestPage';
 
 
 const routes = [
@@ -32,6 +34,7 @@ const routes = [
   { path: '/get-estimate', component: GetEstimatePage, preload: true },
   { path: '/estimate/:type', component: EstimationPage, preload: false },
   { path: '/test-estimation', component: EstimationTest, preload: false },
+  { path: '/api-test', component: ApiTestPage, preload: false },
   { path: '/gallery', component: DesignGalleryPage, preload: true },
   { path: '/luxe', component: CrownLuxe, preload: false },
   { path: '/kitchen', component: ModularKitchen, preload: true },
@@ -100,11 +103,12 @@ const RouteHandler = ({ children }) => {
 
 function App() {
   return (
-    <HeroImageProvider>
-      <DesignProvider>
-        <BrowserRouter>
-          <RouteHandler>
-            <Header />
+    <AnimationProvider>
+      <HeroImageProvider>
+        <DesignProvider>
+          <BrowserRouter>
+            <RouteHandler>
+              <Header />
             <Routes>
               {routes.map(({ path, component: Component }) => (
                 <Route key={path} path={path} element={<Component />} />
@@ -116,6 +120,7 @@ function App() {
         </BrowserRouter>
       </DesignProvider>
     </HeroImageProvider>
+  </AnimationProvider>
   );
 }
 

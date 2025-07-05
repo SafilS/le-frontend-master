@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { 
   Calculator, 
   TrendingUp, 
@@ -9,7 +8,7 @@ import {
   Percent
 } from 'lucide-react';
 
-const PricingCalculator = ({ estimationData, onPriceUpdate }) => {
+const PricingCalculator = ({ estimationData = {}, onPriceUpdate = () => {} }) => {
   const [detailedBreakdown, setDetailedBreakdown] = useState({});
   const [totalCost, setTotalCost] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
@@ -134,7 +133,7 @@ const PricingCalculator = ({ estimationData, onPriceUpdate }) => {
 
     if (isEntireHome) {
       // Calculate for each room
-      Object.entries(estimationData.dimensions).forEach(([room, dims]) => {
+      Object.entries(estimationData.dimensions || {}).forEach(([room, dims]) => {
         if (dims.length && dims.width && dims.height) {
           const roomCost = calculateRoomCost(room, dims, estimationData);
           breakdown[room] = roomCost;
@@ -143,7 +142,7 @@ const PricingCalculator = ({ estimationData, onPriceUpdate }) => {
       });
     } else {
       // Calculate for kitchen only
-      const dims = estimationData.dimensions.kitchen;
+      const dims = estimationData.dimensions?.kitchen;
       if (dims?.length && dims?.width && dims?.height) {
         const kitchenCost = calculateKitchenCost(dims, estimationData);
         breakdown.kitchen = kitchenCost;
@@ -323,159 +322,153 @@ const PricingCalculator = ({ estimationData, onPriceUpdate }) => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-2xl shadow-lg p-6"
-    >
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold flex items-center">
-          <Calculator className="mr-2 text-blue-600" />
-          Live Pricing Calculator
-        </h3>
-        <button
-          onClick={() => setShowDetails(!showDetails)}
-          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-        >
-          {showDetails ? 'Hide Details' : 'Show Details'}
-        </button>
-      </div>
+    <div className="sticky top-20 z-10">
+      <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-bold flex items-center">
+            <Calculator className="mr-2 text-blue-600" />
+            Live Pricing Calculator
+          </h3>
+          <button
+            onClick={() => setShowDetails(!showDetails)}
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          >
+            {showDetails ? 'Hide Details' : 'Show Details'}
+          </button>
+        </div>
 
-      {/* Total Cost Display */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-6">
-        <div className="text-center">
-          <div className="text-sm text-gray-600 mb-2">Estimated Total Cost</div>
-          <div className="text-3xl font-bold text-blue-600 mb-2">
-            {formatCurrency(totalCost)}
-          </div>
-          <div className="flex items-center justify-center text-sm text-gray-600">
-            <TrendingUp size={16} className="mr-1 text-green-500" />
-            Real-time calculation based on your selections
+        {/* Total Cost Display */}
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-6">
+          <div className="text-center">
+            <div className="text-sm text-gray-600 mb-2">Estimated Total Cost</div>
+            <div className="text-3xl font-bold text-blue-600 mb-2">
+              {formatCurrency(totalCost)}
+            </div>
+            <div className="flex items-center justify-center text-sm text-gray-600">
+              <TrendingUp size={16} className="mr-1 text-green-500" />
+              Real-time calculation based on your selections
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Quick Summary */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-gray-50 rounded-lg p-4">
-          <div className="text-sm text-gray-600">Material Cost</div>
-          <div className="text-lg font-semibold">
-            {formatCurrency(Object.values(detailedBreakdown).reduce((sum, room) => {
-              if (room.materials) {
-                return sum + Object.values(room.materials).reduce((matSum, mat) => matSum + (mat.cost || 0), 0);
-              }
-              return sum;
-            }, 0))}
+        {/* Quick Summary */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <div className="text-sm text-gray-600">Material Cost</div>
+            <div className="text-lg font-semibold">
+              {formatCurrency(Object.values(detailedBreakdown).reduce((sum, room) => {
+                if (room.materials) {
+                  return sum + Object.values(room.materials).reduce((matSum, mat) => matSum + (mat.cost || 0), 0);
+                }
+                return sum;
+              }, 0))}
+            </div>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <div className="text-sm text-gray-600">Labor Cost</div>
+            <div className="text-lg font-semibold">
+              {formatCurrency(Object.values(detailedBreakdown).reduce((sum, room) => {
+                return sum + (room.labor?.cost || 0);
+              }, 0))}
+            </div>
           </div>
         </div>
-        <div className="bg-gray-50 rounded-lg p-4">
-          <div className="text-sm text-gray-600">Labor Cost</div>
-          <div className="text-lg font-semibold">
-            {formatCurrency(Object.values(detailedBreakdown).reduce((sum, room) => {
-              return sum + (room.labor?.cost || 0);
-            }, 0))}
-          </div>
-        </div>
-      </div>
 
-      {/* Detailed Breakdown */}
-      {showDetails && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          className="space-y-4"
-        >
-          {Object.entries(detailedBreakdown).map(([key, data]) => (
-            key !== 'additional' && (
-              <div key={key} className="border border-gray-200 rounded-lg p-4">
+        {/* Detailed Breakdown */}
+        {showDetails && (
+          <div className="space-y-4 max-h-96 overflow-y-auto">
+            {Object.entries(detailedBreakdown).map(([key, data]) => (
+              key !== 'additional' && (
+                <div key={key} className="border border-gray-200 rounded-lg p-4">
+                  <h4 className="font-semibold mb-3 flex items-center">
+                    {key.includes('_') 
+                      ? key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') 
+                      : key.charAt(0).toUpperCase() + key.slice(1)}
+                    <span className="ml-2 text-sm text-gray-500">
+                      ({data.area?.toFixed(1)} sq ft)
+                    </span>
+                  </h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    {data.materials && Object.entries(data.materials).map(([matKey, matData]) => (
+                      <div key={matKey} className="flex justify-between">
+                        <span className="text-gray-600 capitalize">{matKey}:</span>
+                        <span className="font-medium">{formatCurrency(matData.cost)}</span>
+                      </div>
+                    ))}
+                    {data.labor && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Labor:</span>
+                        <span className="font-medium">{formatCurrency(data.labor.cost)}</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between font-semibold">
+                    <span>Room Total:</span>
+                    <span className="text-blue-600">{formatCurrency(data.total)}</span>
+                  </div>
+                </div>
+              )
+            ))}
+
+            {/* Additional Costs */}
+            {detailedBreakdown.additional && (
+              <div className="border border-gray-200 rounded-lg p-4">
                 <h4 className="font-semibold mb-3 flex items-center">
-                  {key.includes('_') 
-                    ? key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') 
-                    : key.charAt(0).toUpperCase() + key.slice(1)}
-                  <span className="ml-2 text-sm text-gray-500">
-                    ({data.area?.toFixed(1)} sq ft)
-                  </span>
+                  Additional Costs
+                  <Info size={16} className="ml-2 text-gray-400" />
                 </h4>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                  {data.materials && Object.entries(data.materials).map(([matKey, matData]) => (
-                    <div key={matKey} className="flex justify-between">
-                      <span className="text-gray-600 capitalize">{matKey}:</span>
-                      <span className="font-medium">{formatCurrency(matData.cost)}</span>
+                <div className="space-y-2 text-sm">
+                  {Object.entries(detailedBreakdown.additional.costs).map(([key, data]) => (
+                    <div key={key} className="flex justify-between">
+                      <span className="text-gray-600 flex items-center">
+                        {data.description}
+                        <span className="ml-1 text-xs">({data.percentage}%)</span>
+                      </span>
+                      <span className="font-medium">{formatCurrency(data.cost)}</span>
                     </div>
                   ))}
-                  {data.labor && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Labor:</span>
-                      <span className="font-medium">{formatCurrency(data.labor.cost)}</span>
-                    </div>
-                  )}
                 </div>
                 
                 <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between font-semibold">
-                  <span>Room Total:</span>
-                  <span className="text-blue-600">{formatCurrency(data.total)}</span>
+                  <span>Additional Total:</span>
+                  <span className="text-orange-600">{formatCurrency(detailedBreakdown.additional.total)}</span>
                 </div>
               </div>
-            )
-          ))}
+            )}
+          </div>
+        )}
 
-          {/* Additional Costs */}
-          {detailedBreakdown.additional && (
-            <div className="border border-gray-200 rounded-lg p-4">
-              <h4 className="font-semibold mb-3 flex items-center">
-                Additional Costs
-                <Info size={16} className="ml-2 text-gray-400" />
-              </h4>
-              
-              <div className="space-y-2 text-sm">
-                {Object.entries(detailedBreakdown.additional.costs).map(([key, data]) => (
-                  <div key={key} className="flex justify-between">
-                    <span className="text-gray-600 flex items-center">
-                      {data.description}
-                      <span className="ml-1 text-xs">({data.percentage}%)</span>
-                    </span>
-                    <span className="font-medium">{formatCurrency(data.cost)}</span>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between font-semibold">
-                <span>Additional Total:</span>
-                <span className="text-orange-600">{formatCurrency(detailedBreakdown.additional.total)}</span>
-              </div>
-            </div>
-          )}
-        </motion.div>
-      )}
+        {/* Price Range Indicator */}
+        <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
+          <div className="flex items-center mb-2">
+            <Info size={16} className="text-yellow-600 mr-2" />
+            <span className="text-sm font-medium text-yellow-800">Price Range</span>
+          </div>
+          <div className="text-sm text-yellow-700">
+            Final cost may vary ±15% based on site conditions, material availability, and specific requirements.
+          </div>
+          <div className="mt-2 flex justify-between text-sm">
+            <span>Minimum: {formatCurrency(totalCost * 0.85)}</span>
+            <span>Maximum: {formatCurrency(totalCost * 1.15)}</span>
+          </div>
+        </div>
 
-      {/* Price Range Indicator */}
-      <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
-        <div className="flex items-center mb-2">
-          <Info size={16} className="text-yellow-600 mr-2" />
-          <span className="text-sm font-medium text-yellow-800">Price Range</span>
-        </div>
-        <div className="text-sm text-yellow-700">
-          Final cost may vary ±15% based on site conditions, material availability, and specific requirements.
-        </div>
-        <div className="mt-2 flex justify-between text-sm">
-          <span>Minimum: {formatCurrency(totalCost * 0.85)}</span>
-          <span>Maximum: {formatCurrency(totalCost * 1.15)}</span>
-        </div>
+        {/* Action Buttons */}
+        {/* <div className="mt-6 space-y-3">
+          <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
+            <DollarSign size={16} className="mr-2" />
+            Get Detailed Quote
+          </button>
+          <button className="w-full border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center">
+            <Percent size={16} className="mr-2" />
+            Apply for Finance
+          </button>
+        </div> */}
       </div>
-
-      {/* Action Buttons */}
-      <div className="mt-6 space-y-3">
-        <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
-          <DollarSign size={16} className="mr-2" />
-          Get Detailed Quote
-        </button>
-        <button className="w-full border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center">
-          <Percent size={16} className="mr-2" />
-          Apply for Finance
-        </button>
-      </div>
-    </motion.div>
+    </div>
   );
 };
 

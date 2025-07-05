@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useAnimation } from '../context/AnimationContext';
 import { Star } from 'lucide-react';
 
 // Import common components
@@ -17,6 +18,9 @@ import Contact from '../components/home/Contact';
 import DesignToolIntro from '../components/home/DesignToolIntro';
 
 const HomePage = () => {
+  // Get animation context
+  const { disableScrollAnimations } = useAnimation();
+  
   // Fade-in animation for sections
   const fadeInVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -218,9 +222,10 @@ const HomePage = () => {
       {/* Get Free Estimate Section */}
       <motion.section 
         className="estimate-section"
-        initial="hidden"
+        initial={disableScrollAnimations ? "visible" : "hidden"}
         whileInView="visible"
         viewport={{ once: true }}
+        animate={disableScrollAnimations ? "visible" : undefined}
         variants={fadeInVariants}
       >
         <GetFreeEstimate />
@@ -240,9 +245,10 @@ const HomePage = () => {
       {/* Services Showcase Section */}
       <motion.section 
         className="services-section"
-        initial="hidden"
+        initial={disableScrollAnimations ? "visible" : "hidden"}
         whileInView="visible"
         viewport={{ once: true }}
+        animate={disableScrollAnimations ? "visible" : undefined}
         variants={fadeInVariants}
       >
         <div className="container mx-auto px-2 py-12">

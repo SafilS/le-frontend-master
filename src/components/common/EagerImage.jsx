@@ -1,10 +1,10 @@
 import React, { useState, memo } from 'react';
 
 /**
- * LazyImage component modified for eager loading
+ * EagerImage component for immediate image loading
  * 
  * Features:
- * - Eager loading of all images (no IntersectionObserver)
+ * - Eager loading of all images
  * - Blur-up loading effect
  * - Responsive image support with srcSet
  * 
@@ -17,16 +17,16 @@ import React, { useState, memo } from 'react';
  * @param {string} props.sizes Responsive image sizes (optional)
  * @param {string} props.fetchpriority Image fetch priority (optional)
  * @param {Object} props.style Additional inline styles (optional)
- * @returns {JSX.Element} LazyImage component
+ * @returns {JSX.Element} EagerImage component
  */
-const LazyImage = memo(({
+const EagerImage = memo(({ 
   src,
   alt,
   className = '',
   placeholderSrc,
   srcSet,
   sizes,
-  fetchpriority = 'high', // Changed default to high
+  fetchpriority = 'high',
   style = {},
   ...rest
 }) => {
@@ -38,7 +38,7 @@ const LazyImage = memo(({
   };
 
   // Generate unique ID for the image
-  const imageId = `lazy-img-${src.replace(/[^\w]/g, '-')}`;
+  const imageId = `eager-img-${src.replace(/[^\w]/g, '-')}`;
 
   return (
     <div 
@@ -61,11 +61,11 @@ const LazyImage = memo(({
       {/* Main image - load immediately */}
       <img
         id={imageId}
-        src={src} // Always load src immediately
-        srcSet={srcSet} // Always load srcSet immediately
+        src={src}
+        srcSet={srcSet}
         sizes={sizes}
         alt={alt}
-        loading="eager" // Changed to eager loading
+        loading="eager" // Force eager loading
         fetchpriority={fetchpriority}
         onLoad={handleImageLoaded}
         className={`w-full h-full object-cover transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
@@ -82,4 +82,4 @@ const LazyImage = memo(({
   );
 });
 
-export default LazyImage;
+export default EagerImage;

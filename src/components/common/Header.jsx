@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, memo } from 'react';
 import { Menu, X, Phone } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 // Custom Link component with prefetching capability
 const PrefetchLink = memo(({ to, children, className, onClick }) => {
@@ -30,9 +30,45 @@ const Header = () => {
   const [showDesktopNav, setShowDesktopNav] = useState(false);
   const [screenSize, setScreenSize] = useState('large');
   const location = useLocation();
+  const navigate = useNavigate();
   
   // Check if current page is Crown Luxe
   const isCrownLuxePage = location.pathname === '/luxe';
+
+  // Handle estimate button click
+  const handleEstimateClick = useCallback(() => {
+    if (location.pathname === '/') {
+      // If on home page, scroll to the estimate section
+      const estimateSection = document.getElementById('get-estimate');
+      if (estimateSection) {
+        const headerHeight = 80; // Account for fixed header
+        const elementPosition = estimateSection.offsetTop - headerHeight;
+        
+        window.scrollTo({
+          top: elementPosition,
+          behavior: 'smooth'
+        });
+      }
+    } else {
+      // If on other pages, navigate to home page and then scroll
+      navigate('/');
+      // Use setTimeout to ensure page loads before scrolling
+      setTimeout(() => {
+        const estimateSection = document.getElementById('get-estimate');
+        if (estimateSection) {
+          const headerHeight = 80; // Account for fixed header
+          const elementPosition = estimateSection.offsetTop - headerHeight;
+          
+          window.scrollTo({
+            top: elementPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 300);
+    }
+    // Close mobile menu if open
+    setIsMenuOpen(false);
+  }, [location.pathname, navigate]);
 
   // Handle scroll effect for header
   useEffect(() => {
@@ -304,8 +340,8 @@ const Header = () => {
             {/* Compact Contact Button - Desktop - Responsive */}
             {showDesktopNav && (
               <div className="flex items-center flex-shrink-0 ml-2">
-                <PrefetchLink 
-                  to="/estimate/entire-home" 
+                <button
+                  onClick={handleEstimateClick}
                   className={`${isCrownLuxePage ? 'bg-yellow-500/80 hover:bg-yellow-400/90 backdrop-blur-sm' : (isScrolled ? 'bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400' : 'bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400')} text-white py-2 rounded-lg transition-all duration-300 font-bold flex items-center shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap ${
                     screenSize === 'xlarge' ? 'px-4 text-sm' :
                     screenSize === 'large' ? 'px-3 text-sm' :
@@ -315,7 +351,7 @@ const Header = () => {
                   <Phone size={screenSize === 'medium' ? 12 : 14} className={screenSize !== 'medium' ? 'mr-1' : ''} />
                   {screenSize !== 'medium' && <span className="ml-1">Estimate</span>}
                   {screenSize === 'xlarge' && <span className="ml-1">✨</span>}
-                </PrefetchLink>  
+                </button>  
               </div>
             )}
 
@@ -359,14 +395,14 @@ const Header = () => {
                   </PrefetchLink>
                 ))}
                 <div className="border-t border-yellow-200 pt-4 mt-4">
-                  <PrefetchLink 
-                    to="/estimate/entire-home"
+                  <button
+                    onClick={handleEstimateClick}
                     className="block w-full text-center bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-white py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center font-semibold shadow-lg text-sm"
                   >
                     <Phone size={16} className="mr-2" />
                     Get Free Estimate
                     <span className="ml-2">✨</span>
-                  </PrefetchLink>
+                  </button>
                 </div>
               </nav>
             </div>

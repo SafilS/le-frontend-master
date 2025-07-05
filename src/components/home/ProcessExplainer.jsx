@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useAnimation } from '../../context/AnimationContext';
 import { 
   Lightbulb, 
   PenTool, 
@@ -13,6 +14,7 @@ import {
 
 const ProcessExplainer = ({ steps }) => {
   const [activeStep, setActiveStep] = useState(0);
+  const { scrollAnimations, disableScrollAnimations } = useAnimation();
 
   // Default icons if no specific icon is provided
   const defaultIcons = [Lightbulb, PenTool, Hammer, Rocket];
@@ -73,9 +75,10 @@ const ProcessExplainer = ({ steps }) => {
           <motion.div
             className="h-full bg-gradient-to-r from-yellow-600 to-yellow-400 rounded-full"
             variants={progressVariants}
-            initial="hidden"
+            initial={disableScrollAnimations ? "visible" : "hidden"}
             whileInView="visible"
             viewport={{ once: true }}
+            animate={disableScrollAnimations ? "visible" : undefined}
           />
         </div>
 
@@ -83,9 +86,10 @@ const ProcessExplainer = ({ steps }) => {
         <motion.div 
           className="grid grid-cols-4 gap-4"
           variants={containerVariants}
-          initial="hidden"
+          initial={disableScrollAnimations ? "visible" : "hidden"}
           whileInView="visible"
           viewport={{ once: true }}
+          animate={disableScrollAnimations ? "visible" : undefined}
         >
           {steps.map((step, index) => {
             const IconComponent = step.icon || defaultIcons[index % defaultIcons.length];
@@ -151,9 +155,10 @@ const ProcessExplainer = ({ steps }) => {
       <motion.div 
         className="lg:hidden space-y-6"
         variants={containerVariants}
-        initial="hidden"
+        initial={disableScrollAnimations ? "visible" : "hidden"}
         whileInView="visible"
         viewport={{ once: true }}
+        animate={disableScrollAnimations ? "visible" : undefined}
       >
         {steps.map((step, index) => {
           const IconComponent = step.icon || defaultIcons[index % defaultIcons.length];
@@ -226,10 +231,11 @@ const ProcessExplainer = ({ steps }) => {
       {/* Process Summary */}
       <motion.div 
         className="mt-12 text-center"
-        initial={{ opacity: 0, y: 20 }}
+        initial={disableScrollAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.8 }}
+        animate={disableScrollAnimations ? { opacity: 1, y: 0 } : undefined}
       >
         <div className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-white rounded-2xl p-6 max-w-2xl mx-auto">
           <div className="flex items-center justify-center mb-4">

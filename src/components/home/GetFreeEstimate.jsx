@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useAnimation } from '../../context/AnimationContext';
 import { 
   Home, 
   ChefHat, 
@@ -15,6 +16,7 @@ import {
 
 const GetFreeEstimate = () => {
   const navigate = useNavigate();
+  const { disableScrollAnimations } = useAnimation();
 
   const handleEstimateClick = (type) => {
     navigate(`/estimate/${type}`);
@@ -64,7 +66,7 @@ const GetFreeEstimate = () => {
   };
 
   return (
-    <section className="relative py-20 bg-gradient-to-br from-gray-50 via-white to-yellow-50 overflow-hidden">
+    <section id="get-estimate" className="relative py-20 bg-gradient-to-br from-gray-50 via-white to-yellow-50 overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -left-40 w-80 h-80 bg-yellow-200 rounded-full opacity-10 blur-3xl"></div>
@@ -98,9 +100,10 @@ const GetFreeEstimate = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           variants={containerVariants}
-          initial="hidden"
+          initial={disableScrollAnimations ? "visible" : "hidden"}
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
+          animate={disableScrollAnimations ? "visible" : undefined}
           className="text-center mb-16"
         >
           {/* Badge */}
@@ -157,9 +160,10 @@ const GetFreeEstimate = () => {
         {/* Estimation Cards */}
         <motion.div 
           variants={containerVariants}
-          initial="hidden"
+          initial={disableScrollAnimations ? "visible" : "hidden"}
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
+          animate={disableScrollAnimations ? "visible" : undefined}
           className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto"
         >
           {/* Entire Home Card */}
@@ -287,9 +291,10 @@ const GetFreeEstimate = () => {
         {/* Room Types Preview */}
         <motion.div 
           variants={containerVariants}
-          initial="hidden"
+          initial={disableScrollAnimations ? "visible" : "hidden"}
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
+          animate={disableScrollAnimations ? "visible" : undefined}
           className="mt-16"
         >
           <div className="text-center mb-12">
@@ -336,9 +341,10 @@ const GetFreeEstimate = () => {
         {/* Bottom CTA */}
         <motion.div 
           variants={itemVariants}
-          initial="hidden"
+          initial={disableScrollAnimations ? "visible" : "hidden"}
           whileInView="visible"
           viewport={{ once: true }}
+          animate={disableScrollAnimations ? "visible" : undefined}
           className="text-center mt-16"
         >
           <div className="bg-gradient-to-r from-yellow-600 to-orange-500 rounded-2xl p-8 max-w-2xl mx-auto">
