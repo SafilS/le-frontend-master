@@ -37,37 +37,89 @@ const Header = () => {
 
   // Handle estimate button click
   const handleEstimateClick = useCallback(() => {
-    if (location.pathname === '/') {
-      // If on home page, scroll to the estimate section
+    // Close mobile menu if open
+    setIsMenuOpen(false);
+    
+    const scrollToEstimate = () => {
       const estimateSection = document.getElementById('get-estimate');
+      console.log('Looking for estimate section:', estimateSection); // Debug log
+      
       if (estimateSection) {
-        const headerHeight = 80; // Account for fixed header
-        const elementPosition = estimateSection.offsetTop - headerHeight;
+        const headerHeight = 100; // Account for fixed header with some extra margin
+        const rect = estimateSection.getBoundingClientRect();
+        const elementPosition = window.pageYOffset + rect.top - headerHeight;
         
+        console.log('Element rect:', rect); // Debug log
+        console.log('Scrolling to position:', elementPosition); // Debug log
+        
+        // Use window.scrollTo for more reliable scrolling
         window.scrollTo({
           top: elementPosition,
           behavior: 'smooth'
         });
+        return true;
+      }
+      return false;
+    };
+
+    if (location.pathname === '/') {
+      // If on home page, scroll to the estimate section
+      console.log('On home page, attempting to scroll'); // Debug log
+      
+      // Try to scroll immediately
+      if (!scrollToEstimate()) {
+        console.log('Element not found, retrying...'); // Debug log
+        // If element not found, wait for animations to complete and try again
+        setTimeout(() => {
+          if (!scrollToEstimate()) {
+            // If still not found, wait a bit more (for lazy loading)
+            setTimeout(() => {
+              console.log('Final attempt to scroll'); // Debug log
+              if (!scrollToEstimate()) {
+                // Last resort: try to find by class or alternative method
+                const estimateSection = document.querySelector('.estimate-section') || 
+                                      document.querySelector('section[id="get-estimate"]');
+                if (estimateSection) {
+                  console.log('Found section by alternative method'); // Debug log
+                  estimateSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  setTimeout(() => window.scrollBy(0, -100), 300);
+                }
+              }
+            }, 500);
+          }
+        }, 100);
       }
     } else {
       // If on other pages, navigate to home page and then scroll
+      console.log('Navigating to home page first'); // Debug log
       navigate('/');
+      
       // Use setTimeout to ensure page loads before scrolling
       setTimeout(() => {
-        const estimateSection = document.getElementById('get-estimate');
-        if (estimateSection) {
-          const headerHeight = 80; // Account for fixed header
-          const elementPosition = estimateSection.offsetTop - headerHeight;
-          
-          window.scrollTo({
-            top: elementPosition,
-            behavior: 'smooth'
-          });
+        console.log('Page loaded, attempting to scroll'); // Debug log
+        
+        // Try multiple times with increasing delays
+        if (!scrollToEstimate()) {
+          setTimeout(() => {
+            if (!scrollToEstimate()) {
+              setTimeout(() => {
+                console.log('Final attempt after navigation'); // Debug log
+                if (!scrollToEstimate()) {
+                  // Last resort: try to find by class or alternative method
+                  const estimateSection = document.querySelector('.estimate-section') || 
+                                        document.querySelector('section[id="get-estimate"]');
+                  if (estimateSection) {
+                    console.log('Found section by alternative method after navigation'); // Debug log
+                    estimateSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(() => window.scrollBy(0, -100), 300);
+                  }
+                }
+              }, 300);
+            }
+          }, 500);
         }
       }, 300);
     }
-    // Close mobile menu if open
-    setIsMenuOpen(false);
   }, [location.pathname, navigate]);
 
   // Handle scroll effect for header
@@ -129,7 +181,7 @@ const Header = () => {
     { name: 'Bedroom', path: '/bedroom', priority: 5 },
     { name: 'Living', path: '/living-room', priority: 6, fullName: 'Living Room' },
     { name: 'Bathroom', path: '/bathroom', priority: 7 },
-    { name: 'Office', path: '/office', priority: 8, fullName: 'Home Office' },
+    { name: 'Office', path: '/office', priority: 8, fullName: ' Office' },
   ];
 
   // Filter and limit navigation links based on screen size

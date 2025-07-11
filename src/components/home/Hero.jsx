@@ -199,7 +199,7 @@ const Hero = () => {
 
 
       {/* Main Content - Improved mobile layout */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-20 sm:pt-24">
+      <div className="fluid-container relative z-10 pt-20 sm:pt-24">
         <div className="flex items-center justify-center min-h-screen">
           
           <motion.div 
@@ -224,7 +224,7 @@ const Hero = () => {
             {/* Main Headline - Optimized for mobile */}
             <motion.div variants={itemVariants} className="mb-4 sm:mb-6 w-full">
               <div className="bg-black/50 backdrop-blur-sm rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 border border-white/10">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-tight">
                   <span className="block text-white drop-shadow-2xl mb-1 sm:mb-2">
                     Transform Your
                   </span>
@@ -237,7 +237,7 @@ const Hero = () => {
                 </h1>
                 
                 {/* Subtitle - Smaller on mobile */}
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-100 leading-relaxed mt-3 sm:mt-6 max-w-2xl mx-auto px-2 sm:px-0">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 leading-relaxed mt-3 sm:mt-6 max-w-2xl mx-auto px-2 sm:px-0">
                   Where <span className="text-yellow-400 font-semibold">elegance meets functionality</span>.
                 </p>
               </div>
@@ -323,7 +323,7 @@ const Hero = () => {
       <AnimatePresence>
         {showForm && (
           <motion.div 
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center"
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

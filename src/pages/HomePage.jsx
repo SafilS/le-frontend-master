@@ -251,11 +251,11 @@ const HomePage = () => {
         animate={disableScrollAnimations ? "visible" : undefined}
         variants={fadeInVariants}
       >
-        <div className="container mx-auto px-2 py-12">
-          <div className="text-center mb-8">
-            <h2 className="text-4xl font-light mb-2 text-gray-800">Our Signature Services</h2>
-            <div className="w-24 h-1 bg-yellow-600 mx-auto mb-3"></div>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <div className="fluid-container fluid-py-lg">
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="fluid-text-3xl sm:fluid-text-4xl font-light mb-2 text-gray-800">Our Signature Services</h2>
+            <div className="w-16 sm:w-24 h-1 bg-yellow-600 mx-auto mb-3"></div>
+            <p className="fluid-text-base sm:fluid-text-lg text-gray-600 max-w-2xl mx-auto">
               Discover our curated selection of services designed to transform your living spaces into paragons of luxury and functionality.
             </p>
           </div>
@@ -272,11 +272,11 @@ const HomePage = () => {
         viewport={{ once: true }}
         variants={fadeInVariants}
       >
-        <div className="container mx-auto px-2 py-12">
-          <div className="text-center mb-8">
-            <h2 className="text-4xl font-light mb-2 text-gray-800">Our Refined Process</h2>
-            <div className="w-24 h-1 bg-yellow-600 mx-auto mb-3"></div>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <div className="fluid-container fluid-py-lg">
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="fluid-text-3xl sm:fluid-text-4xl font-light mb-2 text-gray-800">Our Refined Process</h2>
+            <div className="w-16 sm:w-24 h-1 bg-yellow-600 mx-auto mb-3"></div>
+            <p className="fluid-text-base sm:fluid-text-lg text-gray-600 max-w-2xl mx-auto">
               A seamless journey from concept to completion, ensuring your vision is realized with precision and elegance.
             </p>
           </div>
@@ -299,19 +299,19 @@ const HomePage = () => {
           <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-yellow-300 rounded-full opacity-5 blur-3xl"></div>
         </div>
         
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-yellow-600 to-yellow-500 rounded-full mb-6">
-              <Star className="w-8 h-8 text-white fill-current" />
+        <div className="fluid-container fluid-py-xl relative z-10">
+          <div className="text-center mb-12 sm:mb-16">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-yellow-600 to-yellow-500 rounded-full mb-6">
+              <Star className="w-6 h-6 sm:w-8 sm:h-8 text-white fill-current" />
             </div>
-            <h2 className="text-4xl lg:text-5xl font-light mb-4 text-gray-800">
+            <h2 className="fluid-text-3xl sm:fluid-text-4xl lg:fluid-text-5xl font-light mb-4 text-gray-800">
               What Our Clients 
               <span className="block text-transparent bg-gradient-to-r from-yellow-600 to-yellow-400 bg-clip-text font-semibold">
                 Say About Us
               </span>
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-yellow-600 to-yellow-400 mx-auto mb-6"></div>
-            <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <div className="w-16 sm:w-24 h-1 bg-gradient-to-r from-yellow-600 to-yellow-400 mx-auto mb-6"></div>
+            <p className="fluid-text-base sm:fluid-text-lg lg:fluid-text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               The satisfaction of our distinguished clientele speaks volumes about our commitment to excellence. 
               Here's what they have to say about their transformation journey with us.
             </p>

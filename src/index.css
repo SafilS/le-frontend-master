@@ -13,11 +13,178 @@ html {
   scrollbar-width: none;  /* Firefox */
 }
 
+/* Base responsive settings */
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1920px) {
+  html {
+    font-size: 18px;
+  }
+}
+
 /* Custom utility classes */
 .text-border-red {
   color: white;
   -webkit-text-stroke: 0.1vw #dc2626; /* Tailwind red-600 */
   text-stroke: 0.1vw #dc2626; /* For broader browser support */
+}
+
+/* Responsive image utilities */
+.responsive-image {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+}
+
+.responsive-bg-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Fluid container utilities */
+.fluid-container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 3rem);
+}
+
+/* Fluid typography utilities - Better scaling */
+.fluid-text-xs { font-size: clamp(0.75rem, 0.5vw + 0.65rem, 0.875rem); }
+.fluid-text-sm { font-size: clamp(0.875rem, 0.5vw + 0.75rem, 1rem); }
+.fluid-text-base { font-size: clamp(1rem, 0.8vw + 0.8rem, 1.25rem); }
+.fluid-text-lg { font-size: clamp(1.125rem, 1vw + 0.85rem, 1.5rem); }
+.fluid-text-xl { font-size: clamp(1.25rem, 1.2vw + 0.9rem, 1.875rem); }
+.fluid-text-2xl { font-size: clamp(1.5rem, 1.5vw + 1rem, 2.25rem); }
+.fluid-text-3xl { font-size: clamp(1.875rem, 2vw + 1.1rem, 3rem); }
+.fluid-text-4xl { font-size: clamp(2.25rem, 2.5vw + 1.2rem, 3.75rem); }
+.fluid-text-5xl { font-size: clamp(2.5rem, 3vw + 1.3rem, 4.5rem); }
+.fluid-text-6xl { font-size: clamp(3rem, 3.5vw + 1.4rem, 5.5rem); }
+.fluid-text-7xl { font-size: clamp(3.5rem, 4vw + 1.5rem, 6.5rem); }
+.fluid-text-8xl { font-size: clamp(4rem, 4.5vw + 1.6rem, 7.5rem); }
+.fluid-text-9xl { font-size: clamp(4.5rem, 5vw + 1.7rem, 8.5rem); }
+
+/* Responsive spacing utilities */
+.fluid-py-xs { padding-top: clamp(0.5rem, 1vw, 1rem); padding-bottom: clamp(0.5rem, 1vw, 1rem); }
+.fluid-py-sm { padding-top: clamp(0.75rem, 1.5vw, 1.5rem); padding-bottom: clamp(0.75rem, 1.5vw, 1.5rem); }
+.fluid-py-md { padding-top: clamp(1rem, 2vw, 2rem); padding-bottom: clamp(1rem, 2vw, 2rem); }
+.fluid-py-lg { padding-top: clamp(1.5rem, 3vw, 3rem); padding-bottom: clamp(1.5rem, 3vw, 3rem); }
+.fluid-py-xl { padding-top: clamp(2rem, 4vw, 4rem); padding-bottom: clamp(2rem, 4vw, 4rem); }
+.fluid-py-2xl { padding-top: clamp(2.5rem, 5vw, 5rem); padding-bottom: clamp(2.5rem, 5vw, 5rem); }
+.fluid-py-3xl { padding-top: clamp(3rem, 6vw, 6rem); padding-bottom: clamp(3rem, 6vw, 6rem); }
+
+.fluid-px-xs { padding-left: clamp(0.5rem, 1vw, 1rem); padding-right: clamp(0.5rem, 1vw, 1rem); }
+.fluid-px-sm { padding-left: clamp(0.75rem, 1.5vw, 1.5rem); padding-right: clamp(0.75rem, 1.5vw, 1.5rem); }
+.fluid-px-md { padding-left: clamp(1rem, 2vw, 2rem); padding-right: clamp(1rem, 2vw, 2rem); }
+.fluid-px-lg { padding-left: clamp(1.5rem, 3vw, 3rem); padding-right: clamp(1.5rem, 3vw, 3rem); }
+.fluid-px-xl { padding-left: clamp(2rem, 4vw, 4rem); padding-right: clamp(2rem, 4vw, 4rem); }
+.fluid-px-2xl { padding-left: clamp(2.5rem, 5vw, 5rem); padding-right: clamp(2.5rem, 5vw, 5rem); }
+.fluid-px-3xl { padding-left: clamp(3rem, 6vw, 6rem); padding-right: clamp(3rem, 6vw, 6rem); }
+
+/* Responsive grid utilities */
+.responsive-grid {
+  display: grid;
+  gap: clamp(1rem, 2vw, 2rem);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+@media (max-width: 640px) {
+  .responsive-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Responsive flex utilities */
+.responsive-flex {
+  display: flex;
+  gap: clamp(1rem, 2vw, 2rem);
+  flex-wrap: wrap;
+}
+
+/* Image aspect ratio utilities */
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-portrait {
+  aspect-ratio: 3 / 4;
+}
+
+.aspect-landscape {
+  aspect-ratio: 4 / 3;
+}
+
+/* Responsive button utilities */
+.responsive-button {
+  padding: clamp(0.75rem, 1.5vw, 1.25rem) clamp(1.5rem, 3vw, 2.5rem);
+  font-size: clamp(0.875rem, 1vw, 1.125rem);
+  border-radius: clamp(0.5rem, 1vw, 1rem);
+}
+
+/* Responsive modal utilities */
+.responsive-modal {
+  width: 90%;
+  max-width: min(90vw, 600px);
+  max-height: 90vh;
+  margin: auto;
+}
+
+@media (max-width: 640px) {
+  .responsive-modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+}
+
+/* Enhanced responsive utilities */
+.responsive-section {
+  padding: clamp(2rem, 5vw, 6rem) clamp(1rem, 4vw, 3rem);
+}
+
+.responsive-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.responsive-text-container {
+  max-width: min(100%, 65ch);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Smooth transitions for layout changes */
+* {
+  transition: font-size 0.3s ease-out, padding 0.3s ease-out, margin 0.3s ease-out;
+}
+
+/* Performance optimizations */
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Touch-friendly sizing on mobile */
+@media (max-width: 768px) {
+  button, .button, a[role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
 /* Loading spinner animation */

@@ -11,7 +11,6 @@ const kitchenDesigns = [
     style: 'L-Shaped',
     features: ['Modular Cabinets', 'Granite Countertop', 'Built-in Appliances', 'Soft-close Drawers'],
     dimensions: '10x8 ft',
-    price: '₹2,50,000 - ₹3,50,000',
     material: 'Engineered Wood',
     capacity: '15+ Cabinets'
   },
@@ -24,7 +23,6 @@ const kitchenDesigns = [
     style: 'U-Shaped',
     features: ['Wooden Cabinets', 'Marble Countertop', 'Island Counter', 'Wine Storage'],
     dimensions: '12x10 ft',
-    price: '₹3,00,000 - ₹4,50,000',
     material: 'Solid Wood',
     capacity: '20+ Cabinets'
   },
@@ -37,7 +35,6 @@ const kitchenDesigns = [
     style: 'Straight',
     features: ['Handle-less Design', 'Quartz Countertop', 'Soft-close Drawers', 'LED Lighting'],
     dimensions: '8x6 ft',
-    price: '₹1,80,000 - ₹2,80,000',
     material: 'Laminated MDF',
     capacity: '10+ Cabinets'
   },
@@ -50,7 +47,6 @@ const kitchenDesigns = [
     style: 'Island',
     features: ['Central Island', 'Premium Hardware', 'Wine Storage', 'Smart Appliances'],
     dimensions: '15x12 ft',
-    price: '₹5,00,000 - ₹8,00,000',
     material: 'Imported Veneer',
     capacity: '25+ Cabinets'
   },
@@ -63,7 +59,6 @@ const kitchenDesigns = [
     style: 'Parallel',
     features: ['Space Optimization', 'LED Lighting', 'Pull-out Organizers', 'Breakfast Counter'],
     dimensions: '12x6 ft',
-    price: '₹2,20,000 - ₹3,20,000',
     material: 'Engineered Wood',
     capacity: '16+ Cabinets'
   },
@@ -76,7 +71,6 @@ const kitchenDesigns = [
     style: 'L-Shaped',
     features: ['Wooden Beams', 'Farmhouse Sink', 'Open Shelving', 'Vintage Hardware'],
     dimensions: '11x9 ft',
-    price: '₹2,80,000 - ₹4,00,000',
     material: 'Solid Hardwood',
     capacity: '18+ Cabinets'
   },
@@ -89,7 +83,6 @@ const kitchenDesigns = [
     style: 'U-Shaped',
     features: ['Smart Appliances', 'Touch Controls', 'Automated Storage', 'Voice Control'],
     dimensions: '13x11 ft',
-    price: '₹4,50,000 - ₹6,50,000',
     material: 'High-tech Composite',
     capacity: '22+ Cabinets'
   },
@@ -102,7 +95,6 @@ const kitchenDesigns = [
     style: 'Straight',
     features: ['Foldable Counter', 'Compact Appliances', 'Vertical Storage', 'Multi-functional'],
     dimensions: '6x4 ft',
-    price: '₹1,50,000 - ₹2,50,000',
     material: 'Compact Laminate',
     capacity: '8+ Cabinets'
   },
@@ -115,7 +107,6 @@ const kitchenDesigns = [
     style: 'L-Shaped',
     features: ['Metal Accents', 'Exposed Brick', 'Industrial Lighting', 'Concrete Countertop'],
     dimensions: '10x9 ft',
-    price: '₹3,20,000 - ₹4,80,000',
     material: 'Metal & Wood',
     capacity: '17+ Cabinets'
   },
@@ -128,7 +119,6 @@ const kitchenDesigns = [
     style: 'Peninsula',
     features: ['Peninsula Counter', 'Modular Units', 'Breakfast Bar', 'Extra Storage'],
     dimensions: '11x8 ft',
-    price: '₹2,80,000 - ₹4,20,000',
     material: 'Modular Panels',
     capacity: '19+ Cabinets'
   }

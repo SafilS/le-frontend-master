@@ -298,42 +298,45 @@ const EstimationPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white pt-20">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white pt-16 sm:pt-20">
+      <div className="fluid-container fluid-py-md">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 sm:mb-8">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-center mb-4"
+            className="flex flex-col sm:flex-row items-center justify-center mb-4 gap-4"
           >
             <button
               onClick={() => navigate('/')}
-              className="flex items-center text-gray-600 hover:text-gray-800 mr-4"
+              className="flex items-center text-gray-600 hover:text-gray-800 text-sm sm:text-base order-2 sm:order-1"
             >
-              <ArrowLeft size={20} className="mr-2" />
+              <ArrowLeft size={18} className="mr-2" />
               Back to Home
             </button>
-            <div className="flex items-center">
-              {isEntireHome ? <Home size={24} className="text-blue-600 mr-2" /> : <ChefHat size={24} className="text-orange-600 mr-2" />}
-              <h1 className="text-3xl font-bold text-gray-900">
+            <div className="flex items-center order-1 sm:order-2">
+              {isEntireHome ? <Home size={20} className="text-blue-600 mr-2 sm:size-6" /> : <ChefHat size={20} className="text-orange-600 mr-2 sm:size-6" />}
+              <h1 className="fluid-text-2xl sm:fluid-text-3xl font-bold text-gray-900 text-center">
                 {isEntireHome ? 'Entire Home' : 'Kitchen'} Estimation
               </h1>
             </div>
           </motion.div>
           
           {/* Progress Bar */}
-          <div className="max-w-2xl mx-auto">
-            <div className="flex justify-between mb-2">
+          <div className="max-w-full sm:max-w-2xl mx-auto">
+            <div className="flex justify-between mb-2 px-2">
               {Array.from({ length: totalSteps }, (_, i) => (
-                <div key={i} className="flex flex-col items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                <div key={i} className="flex flex-col items-center flex-1">
+                  <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm ${
                     i + 1 <= currentStep ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
                   }`}>
-                    {i + 1 <= currentStep ? <CheckCircle size={16} /> : i + 1}
+                    {i + 1 <= currentStep ? <CheckCircle size={12} className="sm:size-4" /> : i + 1}
                   </div>
-                  <span className="text-xs mt-1 hidden sm:block">
+                  <span className="text-xs mt-1 hidden sm:block text-center max-w-[80px]">
                     {['Dimensions', 'Materials', 'Finishes', 'Timeline', 'Features', 'Contact'][i]}
+                  </span>
+                  <span className="text-xs mt-1 block sm:hidden">
+                    {i + 1}
                   </span>
                 </div>
               ))}
@@ -347,7 +350,7 @@ const EstimationPage = () => {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Main Form */}
           <div className="lg:col-span-2">
             <motion.div
@@ -355,16 +358,16 @@ const EstimationPage = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="bg-white rounded-2xl shadow-lg p-8"
+              className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8"
             >
               {renderStepContent()}
               
               {/* Navigation */}
-              <div className="flex justify-between mt-8">
+              <div className="flex flex-col sm:flex-row justify-between mt-6 sm:mt-8 gap-4 sm:gap-0">
                 {currentStep > 1 && (
                   <button
                     onClick={handleBack}
-                    className="flex items-center px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="responsive-button flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 order-2 sm:order-1"
                   >
                     <ArrowLeft size={16} className="mr-2" />
                     Back
@@ -373,7 +376,7 @@ const EstimationPage = () => {
                 {currentStep < totalSteps && (
                   <button
                     onClick={handleNext}
-                    className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 ml-auto"
+                    className="responsive-button flex items-center justify-center bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 order-1 sm:order-2 sm:ml-auto"
                   >
                     Next
                     <ArrowRight size={16} className="ml-2" />
@@ -383,7 +386,7 @@ const EstimationPage = () => {
                   <button
                     onClick={handleSubmitEstimation}
                     disabled={isSubmitting || submitSuccess}
-                    className={`flex items-center px-6 py-3 text-white rounded-lg ml-auto transition-colors ${
+                    className={`responsive-button flex items-center justify-center text-white rounded-lg transition-colors duration-200 order-1 sm:order-2 sm:ml-auto ${
                       submitSuccess 
                         ? 'bg-green-600 hover:bg-green-700' 
                         : isSubmitting 
@@ -445,13 +448,15 @@ const EstimationPage = () => {
 
           {/* Estimate Summary */}
           <div className="lg:col-span-1">
-            <PricingCalculator 
-              estimationData={estimationData}
-              onPriceUpdate={(total, breakdown) => {
-                setTotalEstimate(total);
-                setBreakdown(breakdown);
-              }}
-            />
+            <div className="sticky top-24">
+              <PricingCalculator 
+                estimationData={estimationData}
+                onPriceUpdate={(total, breakdown) => {
+                  setTotalEstimate(total);
+                  setBreakdown(breakdown);
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -509,11 +514,11 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6 flex items-center">
-        <Ruler className="mr-3 text-blue-600" />
+      <h2 className="fluid-text-2xl font-bold mb-4 sm:mb-6 flex items-center">
+        <Ruler className="mr-2 sm:mr-3 text-blue-600" size={20} />
         Room Dimensions
       </h2>
-      <p className="text-gray-600 mb-8">
+      <p className="fluid-text-base text-gray-600 mb-6 sm:mb-8">
         {isEntireHome 
           ? "We've started with the main rooms: Living Room, Kitchen, and Master Bedroom. You can remove any room you don't need or add additional rooms below. Enter dimensions to see the room visualizer."
           : "Enter the dimensions for your kitchen in feet."
@@ -522,15 +527,15 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
       
       {/* Add Room Controls */}
       {isEntireHome && (
-        <div className="mb-8 p-4 border border-dashed border-blue-300 rounded-lg bg-blue-50">
-          <h3 className="text-lg font-semibold mb-3">Add a Room</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mb-6 sm:mb-8 p-4 border border-dashed border-blue-300 rounded-lg bg-blue-50">
+          <h3 className="fluid-text-lg font-semibold mb-3">Add a Room</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Select Room Type</label>
               <select
                 value={newRoomType}
                 onChange={(e) => setNewRoomType(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
               >
                 <option value="">Select a room type</option>
                 <option value="bedroom_2">Bedroom 2</option>
@@ -549,14 +554,14 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
                 type="text"
                 value={newRoomName}
                 onChange={(e) => setNewRoomName(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                 placeholder="e.g. Study Room"
               />
             </div>
             <div className="flex items-end">
               <button
                 onClick={addNewRoom}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="w-full lg:w-auto responsive-button bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
                 disabled={!newRoomType && !newRoomName}
               >
                 Add Room
@@ -566,34 +571,34 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
         </div>
       )}
       
-      <div className="grid gap-6">
+      <div className="responsive-grid">
         {customRooms.map(room => (
           <motion.div
             key={room}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="border border-gray-200 rounded-lg p-6"
+            className="border border-gray-200 rounded-lg p-4 sm:p-6"
           >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">{roomLabels[room] || room}</h3>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+              <h3 className="fluid-text-lg font-semibold">{roomLabels[room] || room}</h3>
               {isEntireHome && (
                 <button 
                   onClick={() => removeRoom(room)}
-                  className="text-red-500 hover:text-red-700 text-sm flex items-center"
+                  className="text-red-500 hover:text-red-700 text-sm flex items-center self-start sm:self-center"
                 >
                   <span className="mr-1">×</span>
                   Remove
                 </button>
               )}
             </div>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Length (ft)</label>
                 <input
                   type="number"
                   value={data[room]?.length || ''}
                   onChange={(e) => onChange(room, e.target.value, 'length')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                   placeholder="12"
                 />
               </div>
@@ -603,7 +608,7 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
                   type="number"
                   value={data[room]?.width || ''}
                   onChange={(e) => onChange(room, e.target.value, 'width')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                   placeholder="10"
                 />
               </div>
@@ -613,7 +618,7 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
                   type="number"
                   value={data[room]?.height || ''}
                   onChange={(e) => onChange(room, e.target.value, 'height')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                   placeholder="9"
                 />
               </div>
@@ -626,7 +631,7 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
             
             {/* Room Canvas - Only show when dimensions are entered */}
             {data[room]?.length && data[room]?.width && data[room]?.height ? (
-              <div className="mt-6">
+              <div className="mt-4 sm:mt-6">
                 <RoomCanvas
                   dimensions={data[room]}
                   roomType={room}
@@ -634,9 +639,9 @@ const DimensionsStep = ({ isEntireHome, data, onChange }) => {
                 />
               </div>
             ) : (
-              <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg text-center">
+              <div className="mt-4 sm:mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg text-center">
                 <div className="text-gray-500">
-                  <Home size={24} className="mx-auto mb-2 text-gray-400" />
+                  <Home size={20} className="mx-auto mb-2 text-gray-400 sm:size-6" />
                   <p className="text-sm">Enter all dimensions to see the room visualizer</p>
                 </div>
               </div>

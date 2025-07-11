@@ -9,7 +9,7 @@ const StarRating = memo(({ rating = 5 }) => (
       [...Array(5)].map((_, i) => (
         <Star
           key={i}
-          className={`w-5 h-5 ${
+          className={`w-4 h-4 sm:w-5 sm:h-5 ${
             i < rating 
               ? 'text-yellow-400 fill-current' 
               : 'text-gray-300'
@@ -60,17 +60,17 @@ const TestimonialCard = memo(({ testimonial, direction }) => {
       }}
       className="w-full"
     >
-      <div className="bg-gradient-to-br from-white via-gray-50 to-yellow-50 rounded-3xl shadow-2xl p-8 lg:p-12 border border-yellow-100 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-white via-gray-50 to-yellow-50 rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8 xl:p-12 border border-yellow-100 relative overflow-hidden">
         {/* Quote icon */}
-        <div className="absolute top-6 left-6 opacity-10">
-          <Quote className="w-16 h-16 text-yellow-600" />
+        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 opacity-10">
+          <Quote className="w-12 h-12 sm:w-16 sm:h-16 text-yellow-600" />
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-center relative z-10">
           {/* Client Image and Info */}
           <div className="text-center lg:text-left">
-            <div className="relative inline-block mb-6">
-              <div className="w-32 h-32 lg:w-40 lg:h-40 mx-auto lg:mx-0 rounded-full overflow-hidden shadow-xl border-4 border-white">
+            <div className="relative inline-block mb-4 sm:mb-6">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 mx-auto lg:mx-0 rounded-full overflow-hidden shadow-xl border-4 border-white">
                 <img 
                   src={testimonial.imagePath} 
                   alt={testimonial.name}
@@ -83,14 +83,14 @@ const TestimonialCard = memo(({ testimonial, direction }) => {
             </div>
             
             <div className="space-y-2">
-              <h4 className="text-xl lg:text-2xl font-bold text-gray-800">
+              <h4 className="fluid-text-lg sm:fluid-text-xl lg:fluid-text-2xl font-bold text-gray-800">
                 {testimonial.name}
               </h4>
-              <p className="text-gray-600 font-medium">
+              <p className="fluid-text-sm sm:fluid-text-base text-gray-600 font-medium">
                 {testimonial.role}
               </p>
               {testimonial.location && (
-                <p className="text-sm text-gray-500">
+                <p className="text-xs sm:text-sm text-gray-500">
                   📍 {testimonial.location}
                 </p>
               )}
@@ -98,15 +98,15 @@ const TestimonialCard = memo(({ testimonial, direction }) => {
           </div>
 
           {/* Testimonial Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             <StarRating rating={testimonial.rating} />
             
-            <blockquote className="text-lg lg:text-xl text-gray-700 leading-relaxed italic relative">
-              <span className="text-4xl text-yellow-400 absolute -top-2 -left-2">"</span>
-              <span className="relative z-10 pl-6">
+            <blockquote className="fluid-text-base sm:fluid-text-lg lg:fluid-text-xl text-gray-700 leading-relaxed italic relative">
+              <span className="text-2xl sm:text-3xl lg:text-4xl text-yellow-400 absolute -top-1 -left-1 sm:-top-2 sm:-left-2">"</span>
+              <span className="relative z-10 pl-4 sm:pl-6">
                 {testimonial.quote}
               </span>
-              <span className="text-4xl text-yellow-400 absolute -bottom-4 -right-2">"</span>
+              <span className="text-2xl sm:text-3xl lg:text-4xl text-yellow-400 absolute -bottom-2 -right-1 sm:-bottom-4 sm:-right-2">"</span>
             </blockquote>
 
             {/* Project details */}
@@ -244,37 +244,39 @@ const TestimonialCarousel = ({ testimonials }) => {
       </div>
 
       {/* Navigation Controls */}
-      <div className="flex items-center justify-between mt-8">
+      <div className="flex flex-col sm:flex-row items-center justify-between mt-6 sm:mt-8 gap-4 sm:gap-0">
         {/* Previous/Next Buttons */}
-        <div className="flex gap-4">
+        <div className="flex gap-3 sm:gap-4">
           <motion.button
             onClick={prevTestimonial}
-            className="group bg-white hover:bg-yellow-50 border-2 border-yellow-200 hover:border-yellow-400 rounded-full p-3 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="group bg-white hover:bg-yellow-50 border-2 border-yellow-200 hover:border-yellow-400 rounded-full p-2 sm:p-3 transition-all duration-300 shadow-lg hover:shadow-xl"
             aria-label="Previous testimonial"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
-            <ChevronLeft className="w-6 h-6 text-gray-600 group-hover:text-yellow-600 transition-colors" />
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover:text-yellow-600 transition-colors" />
           </motion.button>
           
           <motion.button
             onClick={nextTestimonial}
-            className="group bg-white hover:bg-yellow-50 border-2 border-yellow-200 hover:border-yellow-400 rounded-full p-3 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="group bg-white hover:bg-yellow-50 border-2 border-yellow-200 hover:border-yellow-400 rounded-full p-2 sm:p-3 transition-all duration-300 shadow-lg hover:shadow-xl"
             aria-label="Next testimonial"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
-            <ChevronRight className="w-6 h-6 text-gray-600 group-hover:text-yellow-600 transition-colors" />
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover:text-yellow-600 transition-colors" />
           </motion.button>
         </div>
 
         {/* Dot Indicators */}
-        {dotIndicators}
+        <div className="order-3 sm:order-2">
+          {dotIndicators}
+        </div>
 
         {/* Auto-play Toggle */}
         <motion.button
           onClick={toggleAutoPlay}
-          className={`group border-2 rounded-full p-3 transition-all duration-300 shadow-lg hover:shadow-xl ${
+          className={`group border-2 rounded-full p-2 sm:p-3 transition-all duration-300 shadow-lg hover:shadow-xl order-2 sm:order-3 ${
             isAutoPlaying
               ? 'bg-yellow-500 border-yellow-500 hover:bg-yellow-600'
               : 'bg-white border-yellow-200 hover:border-yellow-400 hover:bg-yellow-50'
@@ -284,9 +286,9 @@ const TestimonialCarousel = ({ testimonials }) => {
           whileTap={{ scale: 0.95 }}
         >
           {isAutoPlaying ? (
-            <Pause className="w-6 h-6 text-white" />
+            <Pause className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           ) : (
-            <Play className="w-6 h-6 text-gray-600 group-hover:text-yellow-600 transition-colors" />
+            <Play className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover:text-yellow-600 transition-colors" />
           )}
         </motion.button>
       </div>

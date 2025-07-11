@@ -57,7 +57,7 @@ const ServiceCard = memo(({ service, index, isMobile }) => {
       whileHover={{ y: -8 }}
     >
       {/* Service Image */}
-      <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
+      <div className="relative h-48 sm:h-56 md:h-64 lg:h-72 overflow-hidden">
         <motion.div
           className="w-full h-full bg-cover bg-center"
           style={{ backgroundImage: `url(${service.imagePath})` }}
@@ -78,29 +78,29 @@ const ServiceCard = memo(({ service, index, isMobile }) => {
           whileHover="hover"
         >
           <div className="text-center text-white">
-            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-              <ArrowRight className="w-8 h-8" />
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 backdrop-blur-sm">
+              <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8" />
             </div>
-            <p className="text-lg font-semibold">Explore Service</p>
+            <p className="text-base sm:text-lg font-semibold">Explore Service</p>
           </div>
         </motion.div>
 
         {/* Badges */}
-        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium text-gray-800">
+        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-white/90 backdrop-blur-sm px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium text-gray-800">
           {service.category || 'Premium'}
         </div>
-        <div className="absolute top-4 right-4 bg-yellow-500 text-white px-2 py-1 rounded-full flex items-center text-sm font-medium">
+        <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-yellow-500 text-white px-2 py-1 rounded-full flex items-center text-xs sm:text-sm font-medium">
           <Star className="w-3 h-3 mr-1 fill-current" />
           {service.rating || '4.9'}
         </div>
       </div>
 
       {/* Service Content */}
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-yellow-600 transition-colors duration-300">
+      <div className="p-4 sm:p-6">
+        <h3 className="fluid-text-lg sm:fluid-text-xl font-bold text-gray-800 mb-3 group-hover:text-yellow-600 transition-colors duration-300">
           {service.title}
         </h3>
-        <p className="text-gray-600 leading-relaxed mb-4 line-clamp-3">
+        <p className="fluid-text-sm sm:fluid-text-base text-gray-600 leading-relaxed mb-4 line-clamp-3">
           {service.description}
         </p>
 
