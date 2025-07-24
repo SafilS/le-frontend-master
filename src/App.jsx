@@ -26,7 +26,6 @@ import { DesignProvider } from './context/DesignContext';
 import { HeroImageProvider } from './context/HeroImageContext';
 import Contact from './components/contact/Contact';
 import Chatbot  from './components/chatbot/Chatbot';
-import ApiTestPage from './pages/ApiTestPage';
 
 
 const routes = [
@@ -34,7 +33,6 @@ const routes = [
   { path: '/get-estimate', component: GetEstimatePage, preload: true },
   { path: '/estimate/:type', component: EstimationPage, preload: false },
   { path: '/test-estimation', component: EstimationTest, preload: false },
-  { path: '/api-test', component: ApiTestPage, preload: false },
   { path: '/gallery', component: DesignGalleryPage, preload: true },
   { path: '/luxe', component: CrownLuxe, preload: false },
   { path: '/kitchen', component: ModularKitchen, preload: true },

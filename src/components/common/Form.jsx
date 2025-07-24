@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Loader, CheckCircle, Phone, Mail, User, Lock } from 'lucide-react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 
 const Form = () => {
@@ -29,6 +30,19 @@ const Form = () => {
     
     return () => clearInterval(timer);
   }, [countdown]);
+
+
+  const getBrowserData = async () => ({
+    userAgent: navigator.userAgent,
+    language: navigator.language,
+  });
+
+  const getClientId = async () => {
+    const fp = await FingerprintJS.load();
+    const result = await fp.get();
+    return result.visitorId;
+  };
+
 
   const validateStep1 = () => {
     const newErrors = {};
@@ -107,51 +121,122 @@ const Form = () => {
     });
   };
 
-  const handleSubmitStep1 = (e) => {
-    e.preventDefault();
-    
-    if (validateStep1()) {
-      setIsLoading(true);
-      
-      // Simulate API call to send OTP
-      setTimeout(() => {
-        setIsLoading(false);
-        setStep(2);
-        setCountdown(30); // Set 30 seconds countdown for resend OTP
-      }, 1500);
-    }
+  const extractPhoneNumber = (phone) => {
+    // Assuming country code +91 (India)
+    // Example: "+919876543210" → "9876543210"
+    return phone.replace(/^(\+91|91)/, '');
   };
 
-  const handleSubmitStep2 = (e) => {
+  const handleSubmitStep1 = async (e) => {
     e.preventDefault();
-    
-    if (validateStep2()) {
-      setIsLoading(true);
-      
-      // Simulate API call to verify OTP
-      setTimeout(() => {
-        setIsLoading(false);
-        setIsVerified(true);
-        
-        // Move to success screen after a brief delay
-        setTimeout(() => {
-          setStep(3);
-        }, 1000);
-      }, 1500);
-    }
-  };
 
-  const handleResendOTP = () => {
-    if (countdown > 0) return;
-    
+    if (!validateStep1()) return;
+
     setIsLoading(true);
-    
-    // Simulate API call to resend OTP
-    setTimeout(() => {
+
+    const userBrowserData = await getBrowserData();
+    const fingerprint = await getClientId();
+    const rawPhone = formData.phone;
+    const cleanedPhone = extractPhoneNumber(rawPhone);
+
+    try {
+      const res = await fetch('https://le-crown-interiors-backend.onrender.com/otp/sendotp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          userBrowserData,
+          fingerprint,
+          phoneNumber: cleanedPhone,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setStep(2);
+        setCountdown(30);
+      }
+
+      console.log(data.message); // You may want to show this to the user
+    } catch (err) {
+      console.error("OTP Send Error:", err.message);
+    } finally {
       setIsLoading(false);
-      setCountdown(30); // Reset countdown
-    }, 1000);
+    }
   };
+
+
+  const handleSubmitStep2 = async (e) => {
+    e.preventDefault();
+    if (!formData.otp) return;
+
+      setIsLoading(true);
+
+      const fingerprint = await getClientId();
+
+      try {
+        const res = await fetch('https://le-crown-interiors-backend.onrender.com/otp/verifyotp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            otp: formData.otp,
+            fingerprint,
+            phoneNumber: extractPhoneNumber(formData.phone),
+          }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.message === "OTP verified successfully") {
+          console.log("OTP Verified");
+          setStep(3); // ✅ Ensure this is called
+        } else {
+          console.warn("OTP verification failed", data.message);
+        }
+      } catch (err) {
+        console.error("OTP verify error:", err.message);
+      } finally {
+        setIsLoading(false);
+      }
+  };
+
+
+  const handleResendOTP = async () => {
+    if (countdown > 0) return;
+
+    setIsLoading(true);
+
+    const userBrowserData = await getBrowserData();
+    const fingerprint = await getClientId();
+
+    try {
+      const res = await fetch('https://le-crown-interiors-backend.onrender.com/otp/sendotp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          userBrowserData,
+          fingerprint,
+          phoneNumber: formData.phone,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setCountdown(30);
+      }
+
+      console.log(data.message);
+    } catch (err) {
+      console.error("Resend OTP Error:", err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   const handleNewRequest = () => {
     setStep(1);
