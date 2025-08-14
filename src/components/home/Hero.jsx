@@ -221,23 +221,23 @@ const Hero = () => {
               </div>
             </motion.div>
 
-            {/* Main Headline - Optimized for mobile */}
-            <motion.div variants={itemVariants} className="mb-4 sm:mb-6 w-full">
-              <div className="bg-black/50 backdrop-blur-sm rounded-lg sm:rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 border border-white/10">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-tight">
-                  <span className="block text-white drop-shadow-2xl mb-1 sm:mb-2">
+            {/* Main Headline - Enhanced mobile responsiveness with fluid typography */}
+            <motion.div variants={itemVariants} className="mb-4 sm:mb-6 w-full px-2 sm:px-0">
+              <div className="bg-black/50 backdrop-blur-sm rounded-lg sm:rounded-xl lg:rounded-2xl p-4 sm:p-6 lg:p-8 border border-white/10 overflow-visible">
+                <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-loose py-6 pb-8 overflow-visible">
+                  <span className="block text-white drop-shadow-2xl mb-2 sm:mb-3 py-2">
                     Transform Your
                   </span>
-                  <span className="block bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent drop-shadow-2xl mb-1 sm:mb-2">
+                  <span className="block bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent drop-shadow-2xl mb-3 sm:mb-4 py-2 pb-3">
                     Living Space
                   </span>
-                  <span className="block text-white drop-shadow-2xl">
+                  <span className="block text-white drop-shadow-2xl py-2 pb-3">
                     Into <span className="italic bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">Luxury</span>
                   </span>
                 </h1>
                 
-                {/* Subtitle - Smaller on mobile */}
-                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 leading-relaxed mt-3 sm:mt-6 max-w-2xl mx-auto px-2 sm:px-0">
+                {/* Subtitle - Enhanced mobile responsiveness */}
+                <p className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 leading-relaxed mt-3 sm:mt-6 max-w-2xl mx-auto px-1 sm:px-0">
                   Where <span className="text-yellow-400 font-semibold">elegance meets functionality</span>.
                 </p>
               </div>

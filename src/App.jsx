@@ -26,6 +26,7 @@ import { DesignProvider } from './context/DesignContext';
 import { HeroImageProvider } from './context/HeroImageContext';
 import Contact from './components/contact/Contact';
 import Chatbot  from './components/chatbot/Chatbot';
+import { testScrollToEstimate } from './utils/scrollTest';
 
 
 const routes = [

@@ -42,83 +42,56 @@ const Header = () => {
     
     const scrollToEstimate = () => {
       const estimateSection = document.getElementById('get-estimate');
-      console.log('Looking for estimate section:', estimateSection); // Debug log
+      console.log('Looking for element with id="get-estimate":', estimateSection);
       
       if (estimateSection) {
-        const headerHeight = 100; // Account for fixed header with some extra margin
-        const rect = estimateSection.getBoundingClientRect();
-        const elementPosition = window.pageYOffset + rect.top - headerHeight;
+        console.log('Element found! Scrolling...');
         
-        console.log('Element rect:', rect); // Debug log
-        console.log('Scrolling to position:', elementPosition); // Debug log
+        // Use native scrollIntoView with offset adjustment
+        const yOffset = -100; // Negative offset to account for fixed header
+        const y = estimateSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
         
-        // Use window.scrollTo for more reliable scrolling
+        console.log('Scrolling to position:', y);
+        
         window.scrollTo({
-          top: elementPosition,
+          top: y,
           behavior: 'smooth'
         });
+        
         return true;
+      } else {
+        console.error('❌ Element with id="get-estimate" not found!');
+        // Debug: show all available elements with 'estimate' in their ID
+        const allEstimateElements = document.querySelectorAll('[id*="estimate"]');
+        console.log('Available elements with "estimate" in ID:', allEstimateElements);
+        return false;
       }
-      return false;
     };
 
     if (location.pathname === '/') {
-      // If on home page, scroll to the estimate section
-      console.log('On home page, attempting to scroll'); // Debug log
-      
-      // Try to scroll immediately
+      console.log('✅ On homepage, attempting to scroll...');
       if (!scrollToEstimate()) {
-        console.log('Element not found, retrying...'); // Debug log
-        // If element not found, wait for animations to complete and try again
+        // Retry after a short delay in case DOM isn't fully ready
+        console.log('🔄 First attempt failed, retrying in 500ms...');
         setTimeout(() => {
-          if (!scrollToEstimate()) {
-            // If still not found, wait a bit more (for lazy loading)
-            setTimeout(() => {
-              console.log('Final attempt to scroll'); // Debug log
-              if (!scrollToEstimate()) {
-                // Last resort: try to find by class or alternative method
-                const estimateSection = document.querySelector('.estimate-section') || 
-                                      document.querySelector('section[id="get-estimate"]');
-                if (estimateSection) {
-                  console.log('Found section by alternative method'); // Debug log
-                  estimateSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  setTimeout(() => window.scrollBy(0, -100), 300);
-                }
-              }
-            }, 500);
-          }
-        }, 100);
+          scrollToEstimate();
+        }, 500);
       }
     } else {
-      // If on other pages, navigate to home page and then scroll
-      console.log('Navigating to home page first'); // Debug log
+      console.log('🔄 Not on homepage, navigating first...');
       navigate('/');
       
-      // Use setTimeout to ensure page loads before scrolling
+      // Wait for route change and component mount
       setTimeout(() => {
-        console.log('Page loaded, attempting to scroll'); // Debug log
-        
-        // Try multiple times with increasing delays
+        console.log('🔄 Navigation complete, attempting scroll...');
         if (!scrollToEstimate()) {
+          // Additional retry for navigation case
           setTimeout(() => {
-            if (!scrollToEstimate()) {
-              setTimeout(() => {
-                console.log('Final attempt after navigation'); // Debug log
-                if (!scrollToEstimate()) {
-                  // Last resort: try to find by class or alternative method
-                  const estimateSection = document.querySelector('.estimate-section') || 
-                                        document.querySelector('section[id="get-estimate"]');
-                  if (estimateSection) {
-                    console.log('Found section by alternative method after navigation'); // Debug log
-                    estimateSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    setTimeout(() => window.scrollBy(0, -100), 300);
-                  }
-                }
-              }, 300);
-            }
-          }, 500);
+            console.log('🔄 Second attempt after navigation...');
+            scrollToEstimate();
+          }, 300);
         }
-      }, 300);
+      }, 200);
     }
   }, [location.pathname, navigate]);
 

@@ -125,12 +125,6 @@ const ServiceCard = memo(({ service, index, isMobile }) => {
           </div>
         </div>
 
-        {service.priceRange && (
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm text-gray-500">Starting from</span>
-            <span className="text-lg font-bold text-yellow-600">{service.priceRange}</span>
-          </div>
-        )}
 
         {/* ✅ More Button */}
         <motion.button

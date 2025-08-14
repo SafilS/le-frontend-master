@@ -66,7 +66,7 @@ const GetFreeEstimate = () => {
   };
 
   return (
-    <section className="relative py-20 bg-gradient-to-br from-gray-50 via-white to-yellow-50 overflow-hidden">
+    <section id="get-estimate" className="relative py-20 bg-gradient-to-br from-gray-50 via-white to-yellow-50 overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -left-40 w-80 h-80 bg-yellow-200 rounded-full opacity-10 blur-3xl"></div>

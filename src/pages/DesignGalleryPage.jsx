@@ -62,7 +62,6 @@ const DesignGalleryPage = () => {
       designer: 'Crown Interiors',
       rating: 4.9,
       likes: 234,
-      price: '₹4,50,000 - ₹6,50,000',
       description: 'Opulent bedroom design with premium materials and sophisticated lighting.',
       features: ['King Size Bed', 'Walk-in Closet', 'Ambient Lighting', 'Premium Fabrics'],
       colors: ['#8B4513', '#F5F5DC', '#FFD700', '#2F4F4F']
@@ -76,7 +75,6 @@ const DesignGalleryPage = () => {
       designer: 'Crown Interiors',
       rating: 4.8,
       likes: 189,
-      price: '₹3,50,000 - ₹5,00,000',
       description: 'Sleek and functional kitchen with smart storage solutions.',
       features: ['Island Counter', 'Smart Appliances', 'Soft-close Drawers', 'LED Lighting'],
       colors: ['#FFFFFF', '#2C3E50', '#E74C3C', '#F39C12']
@@ -90,7 +88,6 @@ const DesignGalleryPage = () => {
       designer: 'Crown Interiors',
       rating: 4.7,
       likes: 156,
-      price: '₹2,80,000 - ₹4,20,000',
       description: 'Open-concept living room with modern furniture and artistic elements.',
       features: ['Sectional Sofa', 'Entertainment Unit', 'Accent Wall', 'Floor Lighting'],
       colors: ['#F8F9FA', '#495057', '#007BFF', '#28A745']
@@ -104,7 +101,6 @@ const DesignGalleryPage = () => {
       designer: 'Crown Interiors',
       rating: 4.9,
       likes: 201,
-      price: '₹2,50,000 - ₹3,80,000',
       description: 'Tranquil bathroom design with natural materials and calming colors.',
       features: ['Rain Shower', 'Floating Vanity', 'Natural Stone', 'Ambient Lighting'],
       colors: ['#F5F5F5', '#8FBC8F', '#4682B4', '#D2B48C']
@@ -118,7 +114,6 @@ const DesignGalleryPage = () => {
       designer: 'Crown Interiors',
       rating: 4.6,
       likes: 143,
-      price: '₹1,80,000 - ₹2,90,000',
       description: 'Professional workspace with built-in storage and ergonomic design.',
       features: ['Executive Desk', 'Built-in Shelving', 'Ergonomic Chair', 'Task Lighting'],
       colors: ['#8B4513', '#F5F5DC', '#2F4F4F', '#CD853F']
@@ -132,7 +127,6 @@ const DesignGalleryPage = () => {
       designer: 'Crown Interiors',
       rating: 4.8,
       likes: 178,
-      price: '₹3,20,000 - ₹4,80,000',
       description: 'Spacious wardrobe with organized storage and luxury finishes.',
       features: ['Mirror Panels', 'LED Strips', 'Shoe Racks', 'Jewelry Drawers'],
       colors: ['#FFFFFF', '#C0C0C0', '#FFD700', '#8B4513']
@@ -387,7 +381,6 @@ const DesignGalleryPage = () => {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-lg font-bold text-yellow-600">{design.price}</p>
                         <p className="text-sm text-gray-500 flex items-center gap-1">
                           <Heart size={14} />
                           {design.likes} likes
