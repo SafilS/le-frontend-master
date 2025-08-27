@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const kitchenDesigns = [
   {
@@ -127,6 +128,7 @@ const kitchenDesigns = [
 const categories = ['all', 'modern', 'classic', 'minimalist', 'luxury', 'contemporary', 'rustic', 'smart', 'compact', 'industrial', 'modular'];
 
 const ModularKitchen = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDesign, setSelectedDesign] = useState(null);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'

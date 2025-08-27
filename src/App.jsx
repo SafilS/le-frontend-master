@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, Suspense } from 'react';
 import {
   BrowserRouter,
   Routes,
@@ -33,6 +33,8 @@ const routes = [
   { path: '/', component: HomePage, preload: true },
   { path: '/get-estimate', component: GetEstimatePage, preload: true },
   { path: '/estimate/:type', component: EstimationPage, preload: false },
+  { path: '/estimate/entire-home', component: React.lazy(() => import('./pages/estimate/entire-home')), preload: false },
+  { path: '/estimate/kitchen', component: React.lazy(() => import('./pages/estimate/kitchen')), preload: false },
   { path: '/test-estimation', component: EstimationTest, preload: false },
   { path: '/gallery', component: DesignGalleryPage, preload: true },
   { path: '/luxe', component: CrownLuxe, preload: false },
@@ -100,6 +102,38 @@ const RouteHandler = ({ children }) => {
   return children;
 };
 
+// Conditional Footer component that doesn't render on the entire-home page
+const FooterWithCondition = () => {
+  const location = useLocation();
+  const isEntireHomePage = location.pathname.startsWith('/estimate') || 
+                          location.pathname === '/get-estimate' ||
+                          location.pathname === '/test-estimation';
+  
+  // Don't render the Footer on the entire-home page
+  if (isEntireHomePage) {
+    return null;
+  }
+  
+  // Render the Footer on all other pages
+  return <Footer />;
+};
+
+// Conditional Chatbot component that doesn't render on estimation pages
+const ChatbotWithCondition = () => {
+  const location = useLocation();
+  const isEstimationPage = location.pathname.startsWith('/estimate') || 
+                          location.pathname === '/get-estimate' ||
+                          location.pathname === '/test-estimation';
+  
+  // Don't render the Chatbot on estimation pages
+  if (isEstimationPage) {
+    return null;
+  }
+  
+  // Render the Chatbot on all other pages
+  return <Chatbot />;
+};
+
 function App() {
   return (
     <AnimationProvider>
@@ -108,13 +142,15 @@ function App() {
           <BrowserRouter>
             <RouteHandler>
               <Header />
-            <Routes>
-              {routes.map(({ path, component: Component }) => (
-                <Route key={path} path={path} element={<Component />} />
-              ))}
-            </Routes>
-            <Footer />
-            <Chatbot /> 
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+              <Routes>
+                {routes.map(({ path, component: Component }) => (
+                  <Route key={path} path={path} element={<Component />} />
+                ))}
+              </Routes>
+            </Suspense>
+            <FooterWithCondition />
+            <ChatbotWithCondition /> 
           </RouteHandler>
         </BrowserRouter>
       </DesignProvider>
