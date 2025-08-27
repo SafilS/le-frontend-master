@@ -41,7 +41,7 @@ const KitchenEstimation = () => {
       label: 'U-Shaped Kitchen',
       image: '/assets/images/kitchen/Ushape.png',
       description: 'Maximum storage & workspace',
-      multiplier: 1.6
+      multiplier: 1.5
     },
     {
       id: 'parallel',
@@ -54,10 +54,14 @@ const KitchenEstimation = () => {
 
   // Base pricing for different kitchen types and qualities
   const basePricing = {
-    straight: { basic: { min: 1.5, max: 2.5 }, premium: { min: 3.0, max: 5.0 } },
-    lshaped: { basic: { min: 2.0, max: 3.5 }, premium: { min: 4.0, max: 6.5 } },
-    ushaped: { basic: { min: 2.5, max: 4.0 }, premium: { min: 5.0, max: 8.0 } },
-    parallel: { basic: { min: 2.2, max: 3.8 }, premium: { min: 4.5, max: 7.0 } }
+    // Straight: Basic 1.0–1.2L, Premium = Basic + 0.10L
+    straight: { basic: { min: 1.0, max: 1.2 }, premium: { min: 1.1, max: 1.3 } },
+    // L-Shaped: slightly higher than Straight
+    lshaped: { basic: { min: 1.05, max: 1.25 }, premium: { min: 1.15, max: 1.35 } },
+    // U-Shaped: slightly higher than L-Shaped
+    ushaped: { basic: { min: 1.1, max: 1.3 }, premium: { min: 1.2, max: 1.4 } },
+    // Parallel: small bump over Straight
+    parallel: { basic: { min: 1.03, max: 1.23 }, premium: { min: 1.13, max: 1.33 } }
   };
 
   const handleKitchenTypeSelect = (type) => {
